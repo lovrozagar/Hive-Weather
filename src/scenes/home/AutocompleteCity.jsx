@@ -6,85 +6,27 @@ import {
   Typography,
   Divider,
   CircularProgress,
-  useTheme,
 } from '@mui/material'
 import FlexBox from '../../components/FlexBox'
 import GridBox from '../../components/GridBox'
 
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  Fragment,
-  useMemo,
-} from 'react'
+import { useState, useEffect, useCallback, useRef, Fragment } from 'react'
 import debounce from 'lodash.debounce'
 import uniqid from 'uniqid'
 import { useNavigate } from 'react-router-dom'
-import { makeStyles } from '@mui/styles'
 import { Search } from '@mui/icons-material'
+import useFetchCitySuggestionsData from '../../api/useFetchCitySuggestionsData'
 
 function AutocompleteCity() {
+  const navigate = useNavigate()
   const [city, setCity] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const fetchCitySuggestionsData = useFetchCitySuggestionsData()
 
   let debounceFetch = useRef(null)
 
-  const emptySuggestions = () => setSuggestions([])
-
-  const fetchSuggestions = useCallback(async () => {
-    const autocompleteService =
-      new window.google.maps.places.AutocompleteService()
-    const options = {
-      input: city,
-      types: ['(cities)'],
-    }
-    const results = await new Promise((resolve, reject) => {
-      autocompleteService.getPlacePredictions(options, (results, status) => {
-        if (status !== 'OK') {
-          reject(status)
-        }
-        resolve(results)
-      })
-    })
-    console.log(results)
-    // HERE ERROR OF GETTING ONLY FIRST COUNTRY CODE
-    const placeId = results[0].place_id
-    const details = await new Promise((resolve, reject) => {
-      const placesService = new window.google.maps.places.PlacesService(
-        document.createElement('div')
-      )
-      placesService.getDetails({ placeId }, (details, status) => {
-        if (status !== 'OK') {
-          reject(status)
-        }
-        resolve(details)
-      })
-    })
-
-    const countryCode = details.address_components.find((component) =>
-      component.types.includes('country')
-    ).short_name
-    const lat = details.geometry.location.lat()
-    const lng = details.geometry.location.lng()
-
-    setSuggestions(
-      results.map((suggestion) => ({
-        name: suggestion.structured_formatting.main_text,
-        region: suggestion.structured_formatting.secondary_text,
-        countryCode,
-        lat: lat,
-        lon: lng,
-      })) || []
-    )
-
-    console.log(countryCode)
-
-    // return results
-  }, [city])
+  const emptySuggestions = useCallback(() => setSuggestions([]), [])
 
   const loadSuggestions = useCallback(() => {
     setLoading(true)
@@ -95,17 +37,21 @@ function AutocompleteCity() {
     }
 
     debounceFetch.current = debounce(async () => {
-      await fetchSuggestions()
+      const suggestions = await fetchCitySuggestionsData(city)
+      setSuggestions(suggestions)
       setLoading(false)
     }, 200)
 
     debounceFetch.current()
-  }, [fetchSuggestions])
+  }, [city, fetchCitySuggestionsData])
 
   useEffect(() => {
-    if (city && city.length > 0) loadSuggestions()
-    else emptySuggestions()
-  }, [city, loadSuggestions])
+    if (city && city.length > 0) {
+      loadSuggestions()
+    } else {
+      emptySuggestions()
+    }
+  }, [city, loadSuggestions, emptySuggestions])
 
   const linkStyle = {
     '&&': {
