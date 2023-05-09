@@ -6,6 +6,7 @@ import {
   Typography,
   Divider,
   CircularProgress,
+  useTheme,
 } from '@mui/material'
 import FlexBox from '../../components/FlexBox'
 import GridBox from '../../components/GridBox'
@@ -21,6 +22,8 @@ import {
 import debounce from 'lodash.debounce'
 import uniqid from 'uniqid'
 import { useNavigate } from 'react-router-dom'
+import { makeStyles } from '@mui/styles'
+import { Search } from '@mui/icons-material'
 
 function AutocompleteCity() {
   const [city, setCity] = useState('')
@@ -28,35 +31,60 @@ function AutocompleteCity() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const requestPrefix = useMemo(
-    () => `http://api.geonames.org/searchJSON?name_startsWith=`,
-    []
-  )
-  const requestOptions = useMemo(
-    () => `&featureCode=P&maxRows=5&username=tawish&orderby=population`,
-    []
-  )
   let debounceFetch = useRef(null)
 
   const emptySuggestions = () => setSuggestions([])
 
-  const populateSuggestions = (data) =>
+  const fetchSuggestions = useCallback(async () => {
+    const autocompleteService =
+      new window.google.maps.places.AutocompleteService()
+    const options = {
+      input: city,
+      types: ['(cities)'],
+    }
+    const results = await new Promise((resolve, reject) => {
+      autocompleteService.getPlacePredictions(options, (results, status) => {
+        if (status !== 'OK') {
+          reject(status)
+        }
+        resolve(results)
+      })
+    })
+    console.log(results)
+    // HERE ERROR OF GETTING ONLY FIRST COUNTRY CODE
+    const placeId = results[0].place_id
+    const details = await new Promise((resolve, reject) => {
+      const placesService = new window.google.maps.places.PlacesService(
+        document.createElement('div')
+      )
+      placesService.getDetails({ placeId }, (details, status) => {
+        if (status !== 'OK') {
+          reject(status)
+        }
+        resolve(details)
+      })
+    })
+
+    const countryCode = details.address_components.find((component) =>
+      component.types.includes('country')
+    ).short_name
+    const lat = details.geometry.location.lat()
+    const lng = details.geometry.location.lng()
+
     setSuggestions(
-      data.geonames.map((suggestion) => ({
-        name: suggestion.name,
-        region: suggestion.adminName1,
-        countryCode: suggestion.countryCode,
-        lat: suggestion.lat,
-        lon: suggestion.lng,
+      results.map((suggestion) => ({
+        name: suggestion.structured_formatting.main_text,
+        region: suggestion.structured_formatting.secondary_text,
+        countryCode,
+        lat: lat,
+        lon: lng,
       })) || []
     )
 
-  const fetchSuggestions = useCallback(async () => {
-    const response = await fetch(`${requestPrefix}${city}${requestOptions}`)
-    const json = await response.json()
-    console.log(json)
-    return json
-  }, [city, requestPrefix, requestOptions])
+    console.log(countryCode)
+
+    // return results
+  }, [city])
 
   const loadSuggestions = useCallback(() => {
     setLoading(true)
@@ -67,8 +95,7 @@ function AutocompleteCity() {
     }
 
     debounceFetch.current = debounce(async () => {
-      const data = await fetchSuggestions()
-      populateSuggestions(data)
+      await fetchSuggestions()
       setLoading(false)
     }, 200)
 
@@ -84,7 +111,8 @@ function AutocompleteCity() {
     '&&': {
       cursor: 'pointer',
       textDecoration: 'none',
-      color: 'lightgray',
+      color: 'inherit',
+      // color: 'lightgray',
     },
   }
   const typographyStyle = {
@@ -94,11 +122,11 @@ function AutocompleteCity() {
   }
   const fontNormalStyle = {
     mr: 1,
-    color: 'black',
+    // color: 'black',
   }
   const fontLightStyle = {
     mr: 1,
-    color: 'grey',
+    // color: 'grey',
     fontWeight: '300',
   }
 
@@ -126,9 +154,8 @@ function AutocompleteCity() {
 
   return (
     <Autocomplete
-      // onKeyDown={handleSearchEnter}
       selectOnFocus
-      autoHighlight
+      color='navbar'
       disableListWrap
       handleHomeEndKeys
       loading={loading}
@@ -196,9 +223,17 @@ function InputAutocompleteField({ city, loading, suggestions, ...params }) {
   return (
     <TextField
       {...params}
-      label='Search a city'
+      color='grey'
+      size='small'
+      placeholder='Search a city'
       InputProps={{
         ...params.InputProps,
+        startAdornment: (
+          <Fragment>
+            {<Search color='inherit' size={20} />}
+            {params.InputProps.startAdornment}
+          </Fragment>
+        ),
         endAdornment: (
           <Fragment>
             {loading ? <CircularProgress color='inherit' size={20} /> : null}
@@ -206,40 +241,16 @@ function InputAutocompleteField({ city, loading, suggestions, ...params }) {
           </Fragment>
         ),
       }}
-      helperText={
-        city &&
-        (!isAlphanumeric
-          ? 'Enter letters only'
-          : city.length > 1 && suggestions.length === 0
-          ? 'No matching options'
-          : '')
-      }
+      // helperText={
+      //   city &&
+      //   (!isAlphanumeric
+      //     ? 'Enter letters only'
+      //     : city.length > 1 && suggestions.length === 0
+      //     ? 'No matching options'
+      //     : '')
+      // }
     />
   )
 }
-
-// const handleSearchEnter = async (e) => {
-//   if (e.code === 'Enter') {
-//     const response = await fetch(
-//       `http://api.geonames.org/searchJSON?name_startsWith=${city}&orderby=population&sort=asc&featureClass=P&maxRows=1&username=tawish`
-//     )
-//     const json = await response.json()
-//     const lat = json.geonames[0].lat
-//     const lon = json.geonames[0].lng
-
-//     const response2 = await fetch(
-//       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=relativehumidity_2m&daily=weathercode,temperature_2m_max&timezone=auto`
-//     )
-//     const json2 = await response2.json()
-//     console.log(json2)
-//   }
-// }
-// // ;`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=relativehumidity_2m&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,uv_index_clear_sky_max,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,windspeed_10m_max&timezone=auto`
-
-// const handleSuggestionEnter = async (e, lat, lon) => {
-//   if (e.code === 'Enter') {
-//     fetchForecast(lat, lon)
-//   }
-// }
 
 export default AutocompleteCity
