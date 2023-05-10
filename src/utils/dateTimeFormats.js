@@ -1,19 +1,24 @@
 const yyyymmdd_to_ddmmyyyy = (date) => date.split('-').reverse().join('.') + '.'
 const hourMinutes_yyyymmdd = (date) => date.split('T').at(-1)
 const getDayTime = (hourMinutesSunrise, hourMinutesSunset) => {
-  const sunriseTimeFloat = parseFloat(
-    hourMinutesSunrise.toString().split(':').join('.')
-  )
-  const sunsetTimeFloat = parseFloat(
-    hourMinutesSunset.toString().split(':').join('.')
-  )
+  const sunriseHours = parseInt(hourMinutesSunrise.split(':')[0])
+  const sunriseMinutes = parseInt(hourMinutesSunrise.split(':')[1])
 
-  const dayTimeFloat =
-    sunriseTimeFloat < sunsetTimeFloat
-      ? (sunsetTimeFloat - sunriseTimeFloat).toFixed(2)
-      : (sunriseTimeFloat - sunsetTimeFloat).toFixed(2)
+  const sunsetHours = parseInt(hourMinutesSunset.split(':')[0])
+  const sunsetMinutes = parseInt(hourMinutesSunset.split(':')[1])
 
-  return `${dayTimeFloat.split('.')[0]} h ${dayTimeFloat.split('.')[1]} min`
+  const sunriseTimeFloat = sunriseHours + sunriseMinutes / 60
+  const sunsetTimeFloat = sunsetHours + sunsetMinutes / 60
+
+  let dayTimeFloat
+  if (sunriseTimeFloat < sunsetTimeFloat)
+    dayTimeFloat = sunsetTimeFloat - sunriseTimeFloat
+  else dayTimeFloat = 24 - sunriseTimeFloat + sunsetTimeFloat
+
+  const hours = Math.floor(dayTimeFloat)
+  const minutes = Math.floor((dayTimeFloat - hours) * 60)
+
+  return `${hours} h ${minutes} min`
 }
 
 export { yyyymmdd_to_ddmmyyyy, hourMinutes_yyyymmdd, getDayTime }
