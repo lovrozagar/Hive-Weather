@@ -59,6 +59,8 @@ function HourCard({ hours, hour, index }) {
     is_day: { [index]: isDay },
   } = hours
 
+  console.log(windSpeed)
+
   const typographyStyle = {
     overflow: 'auto',
     textOverflow: 'ellipsis',
