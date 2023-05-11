@@ -1,13 +1,17 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import GridBox from '../../components/GridBox'
-import { Box, Container } from '@mui/material'
+import { Box, Card, Container } from '@mui/material'
 import useFetchForecastData from '../../api/useFetchForecastData'
 import DayCard from './DayCard'
 import Map from './Map'
+import CityTitle from '../../components/CityTitle'
+import CurrentCard from './CurrentCard'
+import ThrowbackCard from './ThrowbackCard'
+import useFetchCurrentWeatherData from '../../api/useFetchThrowbackWeatherData'
 
 function Forecast() {
-  const { city, latitude, longitude } = useParams()
+  const { city, country, countryCode, latitude, longitude } = useParams()
   const navigate = useNavigate()
   console.log(latitude, longitude)
 
@@ -18,17 +22,28 @@ function Forecast() {
     [longitude]
   )
 
-  const forecast = useFetchForecastData(lat, lng)
+  const [timezone, current, forecast] = useFetchForecastData(lat, lng)
+  const [throwback, throwbackDate] = useFetchCurrentWeatherData(lat, lng)
 
   const handleMoreDetailsClick = (dayIndex) =>
     navigate(
-      `/hive-weather/hourly/${city}/${latitude}/${longitude}/${dayIndex}`
+      `/hive-weather/hourly/${city}/${timezone
+        .split('/')
+        .join('_')}/${latitude}/${longitude}/${dayIndex}`
     )
 
   return (
     <Container>
-      <GridBox type='1fr 1fr' sx={{ alignItems: 'start' }}>
-        <GridBox type='repeat(auto-fit, minmax(225px, 1fr))' gap={2}>
+      <CityTitle
+        city={city}
+        country={country}
+        countryCode={countryCode}
+        lat={lat}
+        lng={lng}
+        sx={{ mb: 2 }}
+      />
+      <GridBox type='1fr auto' gap={3} sx={{ alignItems: 'start' }}>
+        <GridBox type='repeat(auto-fit, minmax(250px, 1fr))' gap={2}>
           {forecast
             ? forecast.time.map((date, index) => (
                 <DayCard
@@ -41,9 +56,18 @@ function Forecast() {
               ))
             : null}
         </GridBox>
-        <Box sx={{ m: '0 auto' }}>
+        <GridBox sx={{ m: '0 auto' }} gap={3}>
+          {current ? <CurrentCard city={city} current={current} /> : null}
           <Map coordinates={{ lat, lng }} />
-        </Box>
+          {current && throwback ? (
+            <ThrowbackCard
+              city={city}
+              throwback={throwback}
+              throwbackDate={throwbackDate}
+              currentTime={current.time}
+            />
+          ) : null}
+        </GridBox>
       </GridBox>
     </Container>
   )
