@@ -28,7 +28,8 @@ function CityTitle({
   lat,
   lng,
   sx,
-
+  isHome = false,
+  description,
   ...props
 }) {
   return (
@@ -37,33 +38,45 @@ function CityTitle({
         <CardHeader
           avatar={
             countryCode ? (
-              <CountryIcon height={28} width={28} countryCode={countryCode} />
+              <CountryIcon
+                height={28}
+                width={28}
+                countryCode={
+                  countryCode !== 'no-country-code' ? countryCode : null
+                }
+              />
             ) : (
               <Place />
             )
           }
           title={
             <Typography color='primary' variant='h5' fontWeight='500'>
-              {`${city}, ${country}`}
+              {country && country !== 'no-country'
+                ? `${city}, ${country}`
+                : `${city}`}
             </Typography>
           }
           subheader={
             <Typography variant='h6' fontWeight='300' letterSpacing={1}>
-              {`${lat}°N ${lng}°E`}
+              {description || `${lat}°N ${lng}°E`}
             </Typography>
           }
         />
         <CardActions sx={{ mr: 1 }}>
-          <FlexBox>
-            <LikeSaveButton
-              city={city}
-              country={country}
-              countryCode={countryCode}
-              lat={lat}
-              lng={lng}
-            />
-            <CopyLinkButton />
-          </FlexBox>
+          {isHome ? (
+            <Button variant='outlined'>See more</Button>
+          ) : (
+            <FlexBox>
+              <LikeSaveButton
+                city={city}
+                country={country}
+                countryCode={countryCode}
+                lat={lat}
+                lng={lng}
+              />
+              <CopyLinkButton />
+            </FlexBox>
+          )}
         </CardActions>
       </FlexBox>
     </Card>
@@ -71,3 +84,4 @@ function CityTitle({
 }
 
 export default CityTitle
+// `https://open-meteo.com/images/country-flags/${countryCode}.svg`
