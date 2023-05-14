@@ -1,21 +1,37 @@
 import { useEffect, useState } from 'react'
 import { IconButton, Zoom } from '@mui/material'
 import { FavoriteBorder, Favorite } from '@mui/icons-material'
+
+import PropTypes from 'prop-types'
+import uniqid from 'uniqid'
 import {
   saveLocations,
   getSavedLocations,
 } from '../utils/localStorage/savedLocationsStorage'
-import uniqid from 'uniqid'
+
+LikeSaveButton.propTypes = {
+  city: PropTypes.string.isRequired,
+  lat: PropTypes.string.isRequired,
+  lng: PropTypes.string.isRequired,
+  country: PropTypes.string,
+  countryCode: PropTypes.string,
+}
 
 function LikeSaveButton({ city, country, countryCode, lat, lng }) {
   const [liked, setLiked] = useState(false)
+  const [url, setUrl] = useState(null)
 
   useEffect(() => {
     const locations = getSavedLocations()
+    const url = window.location.href
     const isLikedOnLoad = locations.find(
-      (location) => location.city === city && location.country === country
+      (location) =>
+        location.city === city &&
+        location.country === country &&
+        location.link === url
     )
     setLiked(Boolean(isLikedOnLoad))
+    setUrl(url)
   }, [city, country])
 
   const handleClick = () => {
@@ -31,7 +47,7 @@ function LikeSaveButton({ city, country, countryCode, lat, lng }) {
             countryCode,
             lat,
             lng,
-            link: window.location.href,
+            link: url,
             id: uniqid(),
           },
         ])
@@ -49,12 +65,12 @@ function LikeSaveButton({ city, country, countryCode, lat, lng }) {
   return (
     <IconButton onClick={handleClick} color={liked ? 'red' : 'tone'}>
       {!liked && (
-        <Zoom in={!liked}>
+        <Zoom appear in={true}>
           <FavoriteBorder />
         </Zoom>
       )}
       {liked ? (
-        <Zoom in={liked}>
+        <Zoom appear in={true}>
           <Favorite />
         </Zoom>
       ) : null}
