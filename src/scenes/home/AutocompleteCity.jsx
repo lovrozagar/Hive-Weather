@@ -19,6 +19,7 @@ import useFetchCitySuggestionsData from '../../api/useFetchCitySuggestionsData'
 import CountryIcon from '../../components/CountryIcon'
 import { Paper, IconButton, InputBase, Tooltip } from '@mui/material'
 import { Menu, Directions } from '@mui/icons-material'
+import { makeStyles } from '@mui/styles'
 
 function AutocompleteCity() {
   const navigate = useNavigate()
@@ -105,6 +106,12 @@ function AutocompleteCity() {
 
   const isAlphanumeric = /^[a-zA-Z0-9\s]+$/.test(city)
 
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      minWidth: 200,
+    },
+  }))
+
   return (
     <Paper
       component='form'
@@ -112,6 +119,7 @@ function AutocompleteCity() {
         p: '2px 4px',
         display: 'flex',
         alignItems: 'center',
+        overflowX: 'hidden',
       }}
     >
       <Tooltip
@@ -142,7 +150,17 @@ function AutocompleteCity() {
         onInputChange={handleSearch}
         options={suggestionAsString()}
         getOptionLabel={(option) => option}
-        disableClearable
+        // disableClearable
+        PaperComponent={(props) => (
+          <Paper
+            {...props}
+            sx={{
+              position: 'relative',
+              left: { xs: -110, sm: 0 },
+              width: { xs: 600, sm: 'auto' },
+            }}
+          />
+        )}
         renderInput={(params) => (
           <InputAutocompleteField
             {...params}
@@ -187,9 +205,9 @@ function AutocompleteCity() {
           )
         }}
       />
-      <IconButton type='button' sx={{ p: '10px' }} aria-label='clear'>
+      {/* <IconButton type='button' sx={{ p: '10px' }} aria-label='clear'>
         <Clear />
-      </IconButton>
+      </IconButton> */}
       <Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
       <IconButton
         type='button'
