@@ -2,20 +2,17 @@ import { useCallback, useEffect, useState } from 'react'
 
 const useFetchCurrentWeatherData = (latitude, longitude) => {
   const [currentData, setCurrentData] = useState(null)
-
+  console.log(latitude, longitude)
   const fetchCurrentWeatherData = useCallback(async () => {
-    const prefix =
-      'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m"'
-    const lat = `lat=${latitude}`
-    const lng = `&lon=${longitude}`
-    const options = '&exclude=daily,hourly,minutely,alerts&units=metric'
-    const key = '&appid=20f7632ffc2c022654e4093c6947b4f4'
+    if (!latitude || !longitude) return setCurrentData(null)
 
     try {
-      const response = await fetch(`${prefix}${lat}${lng}${options}${key}`)
+      const response = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=temperature_2m,windspeed_10m,weathercode`
+      )
       const json = await response.json()
-      console.log('OWA', json.current)
-      setCurrentData(json.current)
+      setCurrentData(json.current_weather)
+      console.log('OWA', json.current_weather)
     } catch (error) {
       console.log(error)
       setCurrentData(null)
