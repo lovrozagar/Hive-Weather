@@ -3,44 +3,39 @@ import {
   CardHeader,
   CardContent,
   CardActions,
-  Avatar,
   Typography,
-  Box,
-  IconButton,
   Button,
-  Divider,
 } from '@mui/material'
-import {
-  PlaceOutlined,
-  FavoriteBorder,
-  IosShare,
-  Place,
-  LocationOffOutlined,
-} from '@mui/icons-material'
 import FlexBox from './FlexBox'
 import GridBox from './GridBox'
 import LikeSaveButton from './LikeSaveButton'
 import CopyLinkButton from './CopyLinkButton'
 import CountryIcon from './CountryIcon'
 import {
+  LocationOffOutlined,
+  Thermostat,
   Waves,
-  Grain,
   DoubleArrow,
-  Opacity as Droplet,
-  CloudQueue as Cloud,
-  Flare as UVIndex,
-  AcUnit as SnowParticle,
-  Visibility as VisibilityEye,
-  Speed as Barometer,
-  ExpandMore as ExpandMoreIcon,
   Brightness5Outlined as Day,
   Brightness4Outlined as Night,
 } from '@mui/icons-material'
-import { Thermostat, ThermostatOutlined } from '@mui/icons-material'
-import getDescription from '../utils/getDescription'
 import ToolTip from './ToolTip'
+
 import { useNavigate } from 'react-router-dom'
-// import
+import PropTypes from 'prop-types'
+import getDescription from '../utils/getDescription'
+
+CityTitle.propTypes = {
+  city: PropTypes.string.isRequired,
+  country: PropTypes.string,
+  countryCode: PropTypes.string,
+  lat: PropTypes.string,
+  lng: PropTypes.string,
+  sx: PropTypes.object,
+  isHome: PropTypes.bool,
+  description: PropTypes.string,
+  weather: PropTypes.object,
+}
 
 function CityTitle({
   city,
@@ -67,24 +62,51 @@ function CityTitle({
     }
   }
 
+  const containerStyle = {
+    gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
+    '& > :nth-of-type(1)': {
+      order: 1,
+    },
+    '& > :nth-of-type(2)': {
+      order: 3,
+    },
+    '& > :nth-of-type(3)': {
+      order: 2,
+    },
+    '@media (min-width: 600px)': {
+      '& > :nth-of-type(1)': {
+        order: 1,
+      },
+      '& > :nth-of-type(2)': {
+        order: 2,
+      },
+      '& > :nth-of-type(3)': {
+        order: 3,
+      },
+    },
+  }
+  const cardActionsStyle = {
+    pr: 3,
+    gridRow: { md: '1/3' },
+    gridColumn: { md: '2/3' },
+    pt: 0,
+    pb: { xs: 2, sm: 0 },
+  }
+  const buttonStyle = {
+    width: 1,
+    mx: 'auto',
+  }
+  const cardContentStyle = {
+    pt: 0,
+    pl: 2,
+    '&:last-child': {
+      pb: { xs: 1, sm: 2, md: 2, lg: 2 },
+    },
+  }
+
   return (
     <Card {...props} sx={{ pl: 1, color: 'tone.light', ...sx }}>
-      <GridBox
-        sx={{
-          gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
-          '@media (max-width: 599px)': {
-            '& > :nth-of-type(1)': {
-              order: 1,
-            },
-            '& > :nth-of-type(2)': {
-              order: 3,
-            },
-            '& > :nth-of-type(3)': {
-              order: 2,
-            },
-          },
-        }}
-      >
+      <GridBox sx={containerStyle}>
         <CardHeader
           avatar={
             countryCode ? (
@@ -119,21 +141,20 @@ function CityTitle({
             </Typography>
           }
         />
-        <CardActions
-          sx={{
-            pr: 3,
-            gridRow: { md: '1/3' },
-            gridColumn: { md: '2/3' },
-            pb: { xs: 2, sm: 0 },
-          }}
-        >
+        <CardActions sx={cardActionsStyle}>
           {isHome ? (
             <Button
+              href={
+                !weather
+                  ? 'https://www.google.com/search?q=How+to+turn+on+browser+location'
+                  : null
+              }
+              target='_blank'
               variant='outlined'
-              onClick={handleSeeMore}
-              sx={{ mx: 'auto' }}
+              onClick={weather ? handleSeeMore : null}
+              sx={buttonStyle}
             >
-              See more
+              {weather ? 'See more' : 'Location help'}
             </Button>
           ) : (
             <FlexBox>
@@ -149,15 +170,7 @@ function CityTitle({
           )}
         </CardActions>
         {weather ? (
-          <CardContent
-            sx={{
-              pt: 0,
-              pl: 2,
-              '&:last-child': {
-                pb: { xs: 1, sm: 2, md: 2, lg: 2 },
-              },
-            }}
-          >
+          <CardContent sx={cardContentStyle}>
             <FlexBox gap={2} flexWrap='wrap'>
               <ToolTip title='temperature'>
                 <Typography>{`${getDescription(
