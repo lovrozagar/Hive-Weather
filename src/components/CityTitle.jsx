@@ -14,14 +14,14 @@ import CountryIcon from './CountryIcon'
 import {
   LocationOffOutlined,
   Thermostat,
-  Waves,
+  Air,
   DoubleArrow,
   Brightness5Outlined as Day,
   Brightness4Outlined as Night,
 } from '@mui/icons-material'
 import ToolTip from './ToolTip'
 
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import getDescription from '../utils/getDescription'
 
@@ -49,18 +49,8 @@ function CityTitle({
   weather,
   ...props
 }) {
-  const navigate = useNavigate()
-
-  const handleSeeMore = () => {
-    if (weather) {
-      const latStr = lat.toString().replace('.', '_')
-      const lonStr = lng.toString().replace('.', '_')
-
-      navigate(
-        `/hive-weather/forecast/${city}/${country}/${countryCode}/${latStr}/${lonStr}`
-      )
-    }
-  }
+  const latStr = lat?.toString().replace('.', '_')
+  const lonStr = lng?.toString().replace('.', '_')
 
   const containerStyle = {
     gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
@@ -134,7 +124,6 @@ function CityTitle({
             <Typography
               variant='h6'
               fontWeight='300'
-              letterSpacing={1}
               sx={{ color: 'tone.lightLow' }}
             >
               {description || `${lat}°N ${lng}°E`}
@@ -143,19 +132,28 @@ function CityTitle({
         />
         <CardActions sx={cardActionsStyle}>
           {isHome ? (
-            <Button
-              href={
-                !weather
-                  ? 'https://www.google.com/search?q=How+to+turn+on+browser+location'
-                  : null
-              }
-              target='_blank'
-              variant='outlined'
-              onClick={weather ? handleSeeMore : null}
-              sx={buttonStyle}
-            >
-              {weather ? 'See more' : 'Location help'}
-            </Button>
+            <>
+              {weather ? (
+                <Link
+                  to={`/hive-weather/forecast/${city}/${country}/${countryCode}/${latStr}/${lonStr}`}
+                >
+                  <Button target='_blank' variant='outlined' sx={buttonStyle}>
+                    See more
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  href={
+                    'https://www.google.com/search?q=How+to+turn+on+browser+location'
+                  }
+                  target='_blank'
+                  variant='outlined'
+                  sx={buttonStyle}
+                >
+                  Location help
+                </Button>
+              )}
+            </>
           ) : (
             <FlexBox>
               <LikeSaveButton
@@ -200,7 +198,7 @@ function CityTitle({
               <FlexBox>
                 <ToolTip title='temperature'>
                   <FlexBox gap={0.5}>
-                    <Waves />
+                    <Air />
                     <Typography>{`${weather.windspeed} km/h`}</Typography>
                   </FlexBox>
                 </ToolTip>

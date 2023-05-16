@@ -30,19 +30,25 @@ function AppBar() {
     minHeight: 64,
     gap: { xs: 1, sm: 2, lg: 0 },
   }
-  const titleStye = { flex: { xs: 0, sm: 0, lg: 1 }, mr: 'auto' }
-  const autocompleteStyle = { flex: 1, minWidth: { lg: 750 } }
-  const optionsStyle = { flex: { xs: 0, sm: 0, lg: 1 }, ml: 'auto' }
+  const autocompleteStyle = {
+    position: 'relative',
+    left: { md: -25 },
+    flex: 1,
+    maxWidth: 750,
+    m: 'auto',
+  }
   const optionButtonStyle = { display: { xs: 'none', md: 'inline-flex' } }
 
   return (
     <Bar sx={appBarStyle}>
       <Toolbar sx={toolbarStyle}>
-        <AppTitle component='h1' main sx={titleStye} />
-        <Box color='navbar' sx={autocompleteStyle}>
+        <Box>
+          <AppTitle component='h1' main sx={{ mr: { md: 4 } }} />
+        </Box>
+        <Box sx={autocompleteStyle}>
           <AutocompleteCity />
         </Box>
-        <FlexBox type='end' gap={0.5} sx={optionsStyle}>
+        <FlexBox type='end' gap={1}>
           <Box sx={optionButtonStyle}>
             <Link to='/hive-weather/docs'>
               <Button color='lightPreserved' sx={{ mr: 1 }}>

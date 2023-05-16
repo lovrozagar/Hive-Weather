@@ -1,8 +1,8 @@
-import { useTheme, Link, Box, Typography } from '@mui/material'
+import { useTheme, Box, Typography } from '@mui/material'
 import FlexBox from '../../components/FlexBox'
 import logo from '../../assets/static/logo.svg'
 
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 AppTitle.propTypes = {
@@ -12,16 +12,12 @@ AppTitle.propTypes = {
 }
 
 function AppTitle({ sx, component = 'h3', main = false }) {
-  const navigate = useNavigate()
   const theme = useTheme().palette
-
-  const handleTitleClick = () => navigate('/hive-weather/')
 
   const fluidGray = theme.tone.lightLow
   const lightGray = theme.constant.lightGray
 
-  const linkContainerStyle = {
-    pointerEvents: main ? 'all' : 'none',
+  const containerStyle = {
     ...sx,
   }
   const fontStyle = {
@@ -35,28 +31,41 @@ function AppTitle({ sx, component = 'h3', main = false }) {
   }
 
   return (
-    <Link
-      underline='none'
-      component='button'
-      variant='body2'
-      onClick={main ? handleTitleClick : null}
-      sx={linkContainerStyle}
-    >
-      <FlexBox type='left' gap={0.5}>
-        <Box height='42px' width='42px'>
-          <Box
-            component='img'
-            alt='Hive weather logo'
-            src={logo}
-            width={1}
-            sx={{ objectFit: 'contain' }}
-          />
-        </Box>
-        <Typography component={component} variant='h4' sx={fontStyle}>
-          hive_weather
-        </Typography>
-      </FlexBox>
-    </Link>
+    <Box sx={containerStyle}>
+      {main ? (
+        <Link to='/hive-weather/' style={{ textDecoration: 'none' }}>
+          <FlexBox type='left' gap={0.5}>
+            <Box height='42px' width='42px'>
+              <Box
+                component='img'
+                alt='Hive weather logo'
+                src={logo}
+                width={1}
+                sx={{ objectFit: 'contain' }}
+              />
+            </Box>
+            <Typography component={component} variant='h4' sx={fontStyle}>
+              hive_weather
+            </Typography>
+          </FlexBox>
+        </Link>
+      ) : (
+        <FlexBox type='left' gap={0.5}>
+          <Box height='42px' width='42px'>
+            <Box
+              component='img'
+              alt='Hive weather logo'
+              src={logo}
+              width={1}
+              sx={{ objectFit: 'contain' }}
+            />
+          </Box>
+          <Typography component={component} variant='h4' sx={fontStyle}>
+            hive_weather
+          </Typography>
+        </FlexBox>
+      )}
+    </Box>
   )
 }
 
