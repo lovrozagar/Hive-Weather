@@ -1,31 +1,32 @@
 import {
   Box,
   Link,
-  TextField,
   Autocomplete,
   Typography,
   Divider,
-  CircularProgress,
+  Paper,
+  IconButton,
+  Tooltip,
 } from '@mui/material'
+import { Directions, Search } from '@mui/icons-material'
 import FlexBox from '../../components/FlexBox'
-import GridBox from '../../components/GridBox'
+import CountryIcon from '../../components/CountryIcon'
+import InputAutocompleteField from './InputAutocompleteField'
 
-import { useState, useEffect, useCallback, useRef, Fragment } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import debounce from 'lodash.debounce'
 import uniqid from 'uniqid'
-import { useNavigate } from 'react-router-dom'
-import { Clear, Place, Search } from '@mui/icons-material'
 import useFetchCitySuggestionsData from '../../api/useFetchCitySuggestionsData'
-import CountryIcon from '../../components/CountryIcon'
-import { Paper, IconButton, InputBase, Tooltip } from '@mui/material'
-import { Menu, Directions } from '@mui/icons-material'
-import { makeStyles } from '@mui/styles'
 
 function AutocompleteCity() {
   const navigate = useNavigate()
+
   const [city, setCity] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [loading, setLoading] = useState(false)
+  const [autocompleteRefresh, setAutocompleteRefresh] = useState(0)
+
   const fetchCitySuggestionsData = useFetchCitySuggestionsData()
 
   let debounceFetch = useRef(null)
@@ -57,29 +58,6 @@ function AutocompleteCity() {
     }
   }, [city, loadSuggestions, emptySuggestions])
 
-  const linkStyle = {
-    '&&': {
-      cursor: 'pointer',
-      textDecoration: 'none',
-      color: 'inherit',
-      // color: 'lightgray',
-    },
-  }
-  const typographyStyle = {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    wordBreak: 'keep-all',
-  }
-  const fontNormalStyle = {
-    mr: 1,
-    // color: 'black',
-  }
-  const fontLightStyle = {
-    mr: 1,
-    // color: 'grey',
-    fontWeight: '300',
-  }
-
   // mapping object to a string and extracting later as MUI wants an array of strings
   const suggestionAsString = () => {
     return suggestions.length > 0
@@ -98,6 +76,8 @@ function AutocompleteCity() {
       const latStr = lat.toString().replace('.', '_')
       const lonStr = lon.toString().replace('.', '_')
 
+      setAutocompleteRefresh((prevRefresh) => prevRefresh + 1)
+
       navigate(
         `/hive-weather/forecast/${name}/${country}/${countryCode}/${latStr}/${lonStr}`
       )
@@ -106,22 +86,36 @@ function AutocompleteCity() {
 
   const isAlphanumeric = /^[a-zA-Z0-9\s]+$/.test(city)
 
-  const useStyles = makeStyles((theme) => ({
-    paper: {
-      minWidth: 200,
+  const containerPaperStyle = {
+    p: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    overflowX: 'hidden',
+  }
+  const autocompletePaperStyle = {
+    position: 'relative',
+    left: { xs: -110, sm: 0 },
+    width: { xs: 600, sm: 'auto' },
+  }
+  const linkStyle = {
+    '&&': {
+      cursor: 'pointer',
+      textDecoration: 'none',
+      color: 'inherit',
     },
-  }))
+  }
+  const typographyStyle = {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    wordBreak: 'keep-all',
+  }
+  const fontLightStyle = {
+    mr: 1,
+    fontWeight: '300',
+  }
 
   return (
-    <Paper
-      component='form'
-      sx={{
-        p: '2px 4px',
-        display: 'flex',
-        alignItems: 'center',
-        overflowX: 'hidden',
-      }}
-    >
+    <Paper component='form' sx={containerPaperStyle}>
       <Tooltip
         title='No cities found'
         open={Boolean(
@@ -140,26 +134,20 @@ function AutocompleteCity() {
         </IconButton>
       </Tooltip>
       <Autocomplete
+        key={autocompleteRefresh}
         selectOnFocus
-        color='navbar'
+        clearOnEscape
         disableListWrap
         handleHomeEndKeys
+        color='navbar'
         loading={loading}
         freeSolo={true}
         onChange={handleChange}
         onInputChange={handleSearch}
         options={suggestionAsString()}
         getOptionLabel={(option) => option}
-        // disableClearable
         PaperComponent={(props) => (
-          <Paper
-            {...props}
-            sx={{
-              position: 'relative',
-              left: { xs: -110, sm: 0 },
-              width: { xs: 600, sm: 'auto' },
-            }}
-          />
+          <Paper {...props} sx={autocompletePaperStyle} />
         )}
         renderInput={(params) => (
           <InputAutocompleteField
@@ -183,7 +171,7 @@ function AutocompleteCity() {
                       countryCode={countryCode}
                     />
                     <Typography noWrap sx={typographyStyle}>
-                      <Box component='span' sx={fontNormalStyle}>
+                      <Box component='span' sx={{ mr: 1 }}>
                         {name}
                       </Box>
                       <Box component='span' sx={fontLightStyle}>
@@ -205,9 +193,6 @@ function AutocompleteCity() {
           )
         }}
       />
-      {/* <IconButton type='button' sx={{ p: '10px' }} aria-label='clear'>
-        <Clear />
-      </IconButton> */}
       <Divider sx={{ height: 28, m: 0.5 }} orientation='vertical' />
       <IconButton
         type='button'
@@ -218,33 +203,6 @@ function AutocompleteCity() {
         <Directions />
       </IconButton>
     </Paper>
-  )
-}
-
-function InputAutocompleteField({ city, loading, suggestions, ...params }) {
-  return (
-    <TextField
-      {...params}
-      color='primary'
-      size='small'
-      placeholder='Search a city'
-      sx={{
-        '& .MuiOutlinedInput-root': {
-          '& fieldset': {
-            border: 'none',
-          },
-        },
-      }}
-      InputProps={{
-        ...params.InputProps,
-        endAdornment: (
-          <Fragment>
-            {loading ? <CircularProgress color='inherit' size={20} /> : null}
-            {params.InputProps.endAdornment}
-          </Fragment>
-        ),
-      }}
-    />
   )
 }
 
