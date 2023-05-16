@@ -1,7 +1,6 @@
 import {
   Drawer,
   Box,
-  Link,
   Button,
   IconButton,
   List,
@@ -26,13 +25,12 @@ import GridBox from '../../components/GridBox'
 import AppTitle from './AppTitle'
 
 import { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ModeContext } from '../../App'
 
 function SideMenu() {
   const { mode, handleModeSwitch } = useContext(ModeContext)
   const [open, setOpen] = useState(false)
-  const navigate = useNavigate()
 
   const options = ['Home', 'Docs', 'GitHub', 'mode']
 
@@ -51,38 +49,42 @@ function SideMenu() {
     }
   }
 
-  const handleOptionClick = (option) => {
+  const handleAppSceneClick = (option) => {
     switch (option.toLowerCase()) {
       case 'home':
-        navigate('/hive-weather/')
-        break
+        return '/hive-weather/'
       case 'docs':
-        navigate('hive-weather/docs')
-        break
-      case 'github':
-        break
-      case 'mode':
-        handleModeSwitch()
-        break
+        return 'hive-weather/docs'
       default:
-        null
+        return null
     }
+  }
 
+  const handleLinkNormalClick = (e, option) => {
+    if (option.toLowerCase() === 'github' || option.toLowerCase() === 'mode')
+      e.preventDefault()
+    setOpen(false)
+  }
+
+  const handleLinkMiddleClick = (e, option) => {
+    if (
+      e.button === 1 &&
+      (option.toLowerCase() === 'github' || option.toLowerCase() === 'mode')
+    )
+      e.preventDefault()
     setOpen(false)
   }
 
   return (
     <>
       <IconButton color='inherit' onClick={() => setOpen(true)}>
-        <Menu />
+        <Menu sx={{ fontSize: 28, color: 'whitePreserved.main' }} />
       </IconButton>
       <Drawer
         anchor='right'
         open={open}
         PaperProps={{ sx: { width: 270 } }}
-        ModalProps={{
-          onBackdropClick: () => setOpen(false),
-        }}
+        ModalProps={{ onBackdropClick: () => setOpen(false) }}
       >
         <GridBox gap={1}>
           <AppTitle sx={{ mt: 2, ml: 2.5 }} />
@@ -90,18 +92,34 @@ function SideMenu() {
             {options.map((option) => (
               <Box key={option}>
                 {option === 'mode' ? <Divider sx={{ my: 0.5 }} /> : null}
-                <Link
-                  href={
-                    option.toLocaleLowerCase() === 'github'
-                      ? 'https://github.com/lovrozagar/hive-weather'
-                      : null
-                  }
-                  target='_blank'
-                  underline='none'
-                  color='inherit'
-                >
-                  <ListItem onClick={() => handleOptionClick(option)}>
-                    <ListItemButton sx={{ borderRadius: 1 }}>
+                {option.toLowerCase() === 'github' ? (
+                  <ListItem>
+                    <ListItemButton
+                      href='https://github.com/lovrozagar/Hive-Weather'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      sx={{ color: 'tone.light', borderRadius: 1 }}
+                    >
+                      <ListItemIcon>{getIcon(option)}</ListItemIcon>
+                      <ListItemText primary={option} />
+                    </ListItemButton>
+                  </ListItem>
+                ) : (
+                  <ListItem
+                    component={Link}
+                    to={handleAppSceneClick(option)}
+                    onClick={(e) => handleLinkNormalClick(e, option)}
+                    onAuxClick={(e) => handleLinkMiddleClick(e, option)}
+                    sx={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <ListItemButton
+                      onClick={
+                        option.toLocaleLowerCase() === 'mode'
+                          ? handleModeSwitch
+                          : null
+                      }
+                      sx={{ color: 'tone.light', orderRadius: 1 }}
+                    >
                       <ListItemIcon>{getIcon(option)}</ListItemIcon>
                       <ListItemText
                         primary={
@@ -112,7 +130,7 @@ function SideMenu() {
                       />
                     </ListItemButton>
                   </ListItem>
-                </Link>
+                )}
               </Box>
             ))}
           </List>
