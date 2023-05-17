@@ -6,14 +6,17 @@ const useFetchCurrentWeatherData = (latitude, longitude) => {
   const fetchCurrentWeatherData = useCallback(async () => {
     if (!latitude || !longitude) return
 
+    const backendAbsolutePath = 'http://localhost:5000/api/weather/current?'
+
     try {
       const response = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=temperature_2m,windspeed_10m,weathercode`
+        `${backendAbsolutePath}latitude=${latitude}&longitude=${longitude}`
       )
       const json = await response.json()
-      console.log('current', json.current_weather)
+      console.log('CURRENT BACKEND REQUEST', json)
 
-      setCurrentData(json.current_weather)
+      setCurrentData(json)
+      //
     } catch (error) {
       console.log(error)
       setCurrentData(null)
