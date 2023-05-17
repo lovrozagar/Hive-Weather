@@ -1,34 +1,37 @@
 import { useCallback, useEffect, useState } from 'react'
-import getRandomYearTodaysDate from '../utils/datetime/getRandomYearTodaysDate'
 
-const useFetchCurrentWeatherData = (latitude, longitude) => {
+const useFetchThrowbackWeatherData = (latitude, longitude) => {
   const [throwbackData, setThrowbackData] = useState([null, null])
 
-  const fetchCurrentWeatherData = useCallback(async () => {
-    const throwbackDate = getRandomYearTodaysDate()
+  const fetchThrowbackWeatherData = useCallback(async () => {
+    if (!latitude || !longitude) {
+      setThrowbackData([null, null])
+      return
+    }
 
-    const prefix = 'https://archive-api.open-meteo.com/v1/era5?'
-    const lat = `latitude=${latitude}`
-    const lng = `&longitude=${longitude}`
-    const startDate = `&start_date=${throwbackDate}`
-    const endDate = `&end_date=${throwbackDate}`
-    const options =
-      '&hourly=temperature_2m,windspeed_10m,winddirection_10m,weathercode'
+    try {
+      const backendAbsolutePath = 'http://localhost:5000/api/weather/throwback?'
 
-    const response = await fetch(
-      `${prefix}${lat}${lng}${startDate}${endDate}${options}`
-    )
+      const response = await fetch(
+        `${backendAbsolutePath}?latitude=${latitude}&longitude=${longitude}`
+      )
+      const json = await response.json()
+      const { hourly, throwbackDate } = json
+      console.log('THROWBACK BACKEND REQUEST', json)
 
-    const json = await response.json()
-
-    setThrowbackData([json.hourly, throwbackDate])
+      setThrowbackData([hourly, throwbackDate])
+      //
+    } catch (error) {
+      console.log(error)
+      setThrowbackData([null, null])
+    }
   }, [latitude, longitude])
 
   useEffect(() => {
-    fetchCurrentWeatherData()
-  }, [fetchCurrentWeatherData])
+    fetchThrowbackWeatherData()
+  }, [fetchThrowbackWeatherData])
 
   return throwbackData
 }
 
-export default useFetchCurrentWeatherData
+export default useFetchThrowbackWeatherData
