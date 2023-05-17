@@ -9,7 +9,7 @@ import {
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material'
 import FlexBox from '../../components/FlexBox'
 import AppTitle from './AppTitle'
-import AutocompleteCity from '../home/AutocompleteCity'
+import AutocompleteCity from './AutocompleteCity'
 import SideMenu from './SideMenu'
 
 import { ModeContext } from '../../App'
@@ -41,9 +41,9 @@ function AppBar() {
 
   return (
     <Bar sx={appBarStyle}>
-      <Toolbar sx={toolbarStyle}>
+      <Toolbar component='nav' sx={toolbarStyle}>
         <Box>
-          <AppTitle component='h1' main sx={{ mr: { md: 4 } }} />
+          <AppTitle component='h1' main sx={{ mr: { md: 6 } }} />
         </Box>
         <Box sx={autocompleteStyle}>
           <AutocompleteCity />

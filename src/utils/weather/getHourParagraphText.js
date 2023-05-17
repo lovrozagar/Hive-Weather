@@ -159,7 +159,7 @@ const getClearnessDescription = (cloudCoverage, visibility) => {
   return `${cloudCoverageDescription} ${visibilityDescription}`
 }
 
-const getHourParagraphText = (
+const getHourParagraphText = ({
   temperature,
   feel,
   windDirection,
@@ -167,8 +167,8 @@ const getHourParagraphText = (
   chanceOfRain,
   snowfall,
   visibility,
-  cloudCover
-) => {
+  cloudCover,
+}) => {
   const tempDesc = getTemperatureDescription(temperature)
   const feelDesc = getTemperatureDescription(feel)
   const windDirectionDesc = getWindDirectionDescription(windDirection)
@@ -190,3 +190,4 @@ const getHourParagraphText = (
 }
 
 export default getHourParagraphText
+export { getWindDirectionDescription }

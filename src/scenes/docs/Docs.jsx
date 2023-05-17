@@ -1,4 +1,5 @@
 import {
+  useTheme,
   Box,
   Container,
   Card,
@@ -11,7 +12,8 @@ import {
 import { Anchor } from '@mui/icons-material'
 import FlexBox from '../../components/FlexBox'
 import GridBox from '../../components/GridBox'
-import { useTheme } from '@emotion/react'
+
+import uniqid from 'uniqid'
 
 function Docs() {
   const theme = useTheme().palette
@@ -23,11 +25,11 @@ function Docs() {
       paragraphs: [
         {
           name: 'App Logo',
-          text: 'Sluzi kao logo aplikacije i link za 1. Ekran. Na manjoj sirini ekrana, text nestaje te je samo slika vidljiva.',
+          text: 'Služi kao logotip aplikacije i poveznica za 1. zaslon. Na manjoj širini zaslona tekst nestaje i vidljiva je samo slika.',
         },
         {
           name: 'Autocomplete',
-          text: 'Kako bi se moglo brze navigirati do drugih gradova, Autocomplete komponenta integrirana je u navigacijsku traku umjesto samo na 1. ekran. Polje za tekst spojeno je s Google Autcomplete API-em, pokazuje do 5 sugestija prilikom tipkanja, "debounce" funkcija koristena kako bi se normalizirao broj API zahtjeva. U slucaju da input nije validan ili grad nije naden, tooltip sa prikladnom porukom pojaviti ce se ispod ikone povećala.',
+          text: 'Kako bi se moglo brže navigirati do drugih gradova, komponenta Autocomplete integrirana je u navigacijsku traku umjesto samo na 1. ekranu. Polje za tekst spojeno je s Google Autcomplete API-em, pokazuje do 5 sugestija prilikom tipkanja, "debounce" funkcija korištena kako bi se normalizirao broj API zahtjeva. U slučaju da unos nije valjan ili grad nije nađen, tooltip s prikladnom porukom pojaviti će se ispod ikone povećala.',
           api: 'Google Autocomplete',
         },
         {
@@ -61,7 +63,7 @@ function Docs() {
       paragraphs: [
         {
           name: 'Tražena lokacija, spremanje i dijeljenje - kartica',
-          text: 'Prikazuje lokacijske informacije o gradu. Takoder sadrži srce gumb s kojim se link lokacija tipa "week" sprema u (ili miče iz) "localStorage" i "saved" odjeljak na 1. ekranu. Kartica sadrži i gumb "share" koji prilikom klika koristi Web share API ako je podržan ili, ako nije podržan, kopira link u meduspremnik.',
+          text: 'Prikazuje lokacijske informacije o gradu. Takoder sadrži srce gumb s kojim se poveznica lokacije tipa "week" sprema u (ili miče iz) "localStorage" i "saved" karticu na 1. ekranu. Kartica sadrži i gumb "share" koji prilikom klika koristi Web share API ako je podržan ili, ako nije podržan, kopira poveznicu u međuspremnik.',
           api: 'Web Share API, Open-Meteo Forecast',
         },
         {
@@ -92,7 +94,7 @@ function Docs() {
       paragraphs: [
         {
           name: 'Tražena lokacija, spremanje i dijeljenje - kartica',
-          text: 'Prikazuje lokacijske informacije o gradu. Takoder sadrži srce gumb s kojim se link lokacija tipa "week" sprema u (ili miče iz) "localStorage" i "saved" odjeljak na 1. ekranu. Kartica sadrži i gumb "share" koji prilikom klika koristi Web share API ako je podržan ili, ako nije podržan, kopira link u meduspremnik.',
+          text: 'Prikazuje lokacijske informacije o gradu. Takoder sadrži srce gumb s kojim se link lokacija tipa "day" sprema u (ili miče iz) "localStorage" i "saved" karticu na 1. ekranu. Kartica sadrži i gumb "share" koji prilikom klika koristi Web share API ako je podržan ili, ako nije podržan, kopira poveznicu u međuspremnik.',
           api: 'Web Share API, Open-Meteo Forecast',
         },
         {
@@ -107,22 +109,41 @@ function Docs() {
         },
       ],
     },
+    {
+      title: 'Error ekran',
+      id: 'error',
+      paragraphs: [
+        {
+          name: 'Poruka i gumb za povratak',
+          text: 'Prikazuje poruku o ne postojecoj stranici te gumb koji navigira korisinka natrag na 1. ekran.',
+        },
+      ],
+    },
   ]
 
   const contentStyle = {
     width: 'fit-content',
     pointer: 'cursor',
-    '&:hover > :last-child': { visibility: 'visible' },
-    '&:hover > :first-child': { textDecoration: 'underline' },
+    '&:hover > :first-of-type': { textDecoration: 'underline' },
+    '&:hover > :last-of-type': { visibility: 'visible' },
   }
   const anchorButtonStyle = {
     visibility: 'hidden',
     color: 'primary.main',
   }
+  const paragraphNameStyle = {
+    fontStyle: 'italic',
+    color: 'primary.main',
+    fontWeight: 500,
+    mt: 2,
+  }
+  const textShadowStyle = {
+    textShadow: `1px 1px 15px ${theme.tone.lightLow}`,
+  }
 
   return (
-    <Container sx={{ pb: 10 }}>
-      <Card sx={{ px: 1 }}>
+    <Container component='main' sx={{ pb: 10 }}>
+      <Card sx={{ px: 1, pb: 2 }}>
         <CardHeader
           title={
             <Typography
@@ -132,9 +153,9 @@ function Docs() {
           }
         />
         {content.map((screen, index) => (
-          <>
+          <Box key={uniqid()}>
             <Divider sx={{ mt: index !== 0 ? 2 : 0 }} />
-            <CardContent key={screen} id={screen}>
+            <CardContent id={screen}>
               <FlexBox gap={1} sx={contentStyle}>
                 <Typography
                   id={screen.id}
@@ -149,31 +170,23 @@ function Docs() {
                 </IconButton>
               </FlexBox>
               <GridBox gap={2}>
-                {screen.paragraphs.map((paragraph, index) => (
-                  <Box key={index}>
+                {screen.paragraphs.map((paragraph) => (
+                  <Box key={uniqid()}>
                     <Typography
                       component='h3'
                       paragraph
-                      key={index}
-                      sx={{
-                        fontStyle: 'italic',
-                        color: 'primary.main',
-                        fontWeight: 500,
-                        mt: 2,
-                      }}
+                      sx={paragraphNameStyle}
                     >
                       {paragraph.name}
                     </Typography>
-                    <Typography key={index}>{paragraph.text}</Typography>
+                    <Typography>{paragraph.text}</Typography>
                     <Box gap={1}>
                       {paragraph.api ? (
                         <FlexBox mt={2} gap={1}>
                           <Typography
-                            key={`${paragraph.name}${paragraph?.api}`}
+                            key={uniqid()}
                             color={'tone.light'}
-                            sx={{
-                              textShadow: `1px 1px 15px ${theme.tone.lightLow}`,
-                            }}
+                            sx={textShadowStyle}
                           >
                             {`${
                               paragraph.api.split(',').length > 1
@@ -186,11 +199,9 @@ function Docs() {
                       {paragraph.packages ? (
                         <FlexBox mt={2} gap={1}>
                           <Typography
-                            key={`${paragraph.name}${paragraph?.packages}`}
+                            key={uniqid()}
                             color={'tone.light'}
-                            sx={{
-                              textShadow: `1px 1px 15px ${theme.tone.lightLow}`,
-                            }}
+                            sx={textShadowStyle}
                           >
                             {`${
                               paragraph.packages.split(',').length > 1
@@ -205,7 +216,7 @@ function Docs() {
                 ))}
               </GridBox>
             </CardContent>
-          </>
+          </Box>
         ))}
       </Card>
     </Container>

@@ -12,9 +12,12 @@ const useFetchUserGeolocationData = () => {
 
         try {
           // GOOGLE GEOLOCATION API WITH THE COORDS
-          const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyAO1ey3FsygPJn0Xo-4eDhbhHQFMVmql5Y`
-          )
+          const prefix = 'https://maps.googleapis.com/maps/api/geocode/json?'
+          const latlng = `latlng=${position.coords.latitude},${position.coords.longitude}`
+          const googleKey = import.meta.env.VITE_GOOGLE_API_KEY
+          const key = `&key=${googleKey}`
+
+          const response = await fetch(`${prefix}${latlng}${key}`)
           const data = await response.json()
           console.log('geo', data)
 

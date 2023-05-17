@@ -1,11 +1,20 @@
-import { Box, Card, CardHeader, CardContent, Typography } from '@mui/material'
-import { Thermostat, Waves, DoubleArrow } from '@mui/icons-material'
+import { Card, CardHeader, CardContent, Typography } from '@mui/material'
+import { Thermostat, Air, DoubleArrow } from '@mui/icons-material'
 import FlexBox from '../../components/FlexBox'
 import ToolTip from '../../components/ToolTip'
-import getDescription from '../../utils/getDescription'
-import { getWindDirectionDescription } from '../../utils/getHourParagraphText'
+import ItalicText from '../../components/ItalicText'
 
-function CurrentCard({ city, current }) {
+import PropTypes from 'prop-types'
+import getDescription from '../../utils/weather/getDescription'
+import { getWindDirectionDescription } from '../../utils/weather/getHourParagraphText'
+
+CurrentCard.propTypes = {
+  city: PropTypes.string,
+  current: PropTypes.object,
+  component: PropTypes.string,
+}
+
+function CurrentCard({ city, current, component = 'article' }) {
   const { temperature, is_day, windspeed, weathercode, winddirection } = current
 
   const temp = Math.round(temperature)
@@ -15,7 +24,10 @@ function CurrentCard({ city, current }) {
   const windDirection = getWindDirectionDescription(winddirection)
 
   return (
-    <Card sx={{ maxWidth: '450px' }}>
+    <Card
+      sx={{ width: '100%', maxWidth: { xs: '100%', sm: 450 } }}
+      component={component}
+    >
       <CardHeader title='Current Weather' sx={{ pb: 0 }} />
       <CardContent>
         <Typography>
@@ -44,7 +56,7 @@ function CurrentCard({ city, current }) {
           </ToolTip>
           <ToolTip title='wind speed'>
             <FlexBox gap={0.5}>
-              <Waves />
+              <Air />
               <Typography>{`${windSpeed} km/h`}</Typography>
             </FlexBox>
           </ToolTip>
@@ -55,9 +67,3 @@ function CurrentCard({ city, current }) {
 }
 
 export default CurrentCard
-
-const ItalicText = ({ children }) => (
-  <Box component='span' fontWeight='500' fontStyle='italic'>
-    {children}
-  </Box>
-)

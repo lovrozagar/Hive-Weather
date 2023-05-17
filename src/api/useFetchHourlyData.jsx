@@ -4,6 +4,8 @@ const useFetchHourlyData = (latitude, longitude, index) => {
   const [dayHourlyData, setDayHourlyData] = useState(null)
   // CUSTOM HOOK TO FETCH 24 HOUR DAY DATA
   const fetchHourlyData = useCallback(async () => {
+    if (!latitude || !longitude || (!index && index !== 0)) return
+
     const prefix = 'https://api.open-meteo.com/v1/forecast?'
     const lat = `latitude=${latitude}`
     const lng = `&longitude=${longitude}`

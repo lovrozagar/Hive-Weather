@@ -1,5 +1,13 @@
 import { Box } from '@mui/material'
 
+import PropTypes from 'prop-types'
+
+FlexBox.propTypes = {
+  type: PropTypes.string,
+  children: PropTypes.node,
+  sx: PropTypes.object,
+}
+
 function FlexBox({ type, children, sx, ...props }) {
   let justifyContent
   switch (type) {

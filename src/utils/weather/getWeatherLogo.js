@@ -1,21 +1,21 @@
 // DAY
-import clear from '../assets/animated/clear.svg'
-import clouds_sm from '../assets/animated/clouds_sm.svg'
-import clouds_md from '../assets/animated/clouds_md.svg'
-import clouds_lg from '../assets/animated/clouds_lg.svg'
+import clear from '../../assets/animated/clear.svg'
+import clouds_sm from '../../assets/animated/clouds_sm.svg'
+import clouds_md from '../../assets/animated/clouds_md.svg'
+import clouds_lg from '../../assets/animated/clouds_lg.svg'
 // NIGHT
-import clear_night from '../assets/animated/clear_night.svg'
-import clouds_sm_night from '../assets/animated/clouds_sm_night.svg'
-import clouds_md_night from '../assets/animated/clouds_md_night.svg'
-import clouds_lg_night from '../assets/animated/clouds_lg_night.svg'
+import clear_night from '../../assets/animated/clear_night.svg'
+import clouds_sm_night from '../../assets/animated/clouds_sm_night.svg'
+import clouds_md_night from '../../assets/animated/clouds_md_night.svg'
+import clouds_lg_night from '../../assets/animated/clouds_lg_night.svg'
 //NEUTRAL
-import clouds_full from '../assets/animated/clouds_full.svg'
-import rain_sm from '../assets/animated/rain_sm.svg'
-import rain_md from '../assets/animated/rain_md.svg'
-import rain_full from '../assets/animated/rain_full.svg'
-import snow_sm from '../assets/animated/snow_sm.svg'
-import snow_md from '../assets/animated/snow_md.svg'
-import snow_full from '../assets/animated/snow_full.svg'
+import clouds_full from '../../assets/animated/clouds_full.svg'
+import rain_sm from '../../assets/animated/rain_sm.svg'
+import rain_md from '../../assets/animated/rain_md.svg'
+import rain_full from '../../assets/animated/rain_full.svg'
+import snow_sm from '../../assets/animated/snow_sm.svg'
+import snow_md from '../../assets/animated/snow_md.svg'
+import snow_full from '../../assets/animated/snow_full.svg'
 
 function getWeatherLogo(weatherCode, isDay = 1) {
   switch (weatherCode) {

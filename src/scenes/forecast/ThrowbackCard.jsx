@@ -1,12 +1,29 @@
-import { Box, Card, CardHeader, CardContent, Typography } from '@mui/material'
-import { Thermostat, Waves, DoubleArrow } from '@mui/icons-material'
+import { Card, CardHeader, CardContent, Typography } from '@mui/material'
+import { Thermostat, Air, DoubleArrow } from '@mui/icons-material'
 import FlexBox from '../../components/FlexBox'
 import ToolTip from '../../components/ToolTip'
-import getDescription from '../../utils/getDescription'
-import { getWindDirectionDescription } from '../../utils/getHourParagraphText'
-import { yyyymmdd_to_ddmmyyyy } from '../../utils/dateTimeFormats'
+import ItalicText from '../../components/ItalicText'
 
-function ThrowbackCard({ city, throwback, throwbackDate, currentTime }) {
+import PropTypes from 'prop-types'
+import getDescription from '../../utils/weather/getDescription'
+import { getWindDirectionDescription } from '../../utils/weather/getHourParagraphText'
+import { yyyymmdd_to_ddmmyyyy } from '../../utils/datetime/dateTimeFormats'
+
+ThrowbackCard.propTypes = {
+  city: PropTypes.string,
+  throwback: PropTypes.object,
+  throwbackDate: PropTypes.string,
+  currentTime: PropTypes.string,
+  component: PropTypes.string,
+}
+
+function ThrowbackCard({
+  city,
+  throwback,
+  throwbackDate,
+  currentTime,
+  component = 'article',
+}) {
   const throwbackYear = throwbackDate.split('-')[0]
   const hourAsIndex = parseInt(currentTime.split('T')[0].split('-')[1])
   const throwbackDateFormatted = yyyymmdd_to_ddmmyyyy(throwbackDate)
@@ -23,7 +40,10 @@ function ThrowbackCard({ city, throwback, throwbackDate, currentTime }) {
   const windDirectionDescription = getWindDirectionDescription(windDirection)
 
   return (
-    <Card sx={{ maxWidth: '450px' }}>
+    <Card
+      component={component}
+      sx={{ width: '100%', maxWidth: { xs: '100%', sm: 450 } }}
+    >
       <CardHeader
         title={`Throwback Weather ${throwbackDateFormatted}`}
         sx={{ pb: 0 }}
@@ -31,11 +51,10 @@ function ThrowbackCard({ city, throwback, throwbackDate, currentTime }) {
       <CardContent>
         <Typography>
           On the same date and time of {throwbackYear}, the weather in{' '}
-          <ItalicText>{city}</ItalicText> was{' '}
-          <ItalicText>{temperature} °C</ItalicText>. The weather
-          condition was described as <ItalicText>{description}</ItalicText>.
-          Wind was blowing at the speed of{' '}
-          <ItalicText>{windSpeed} kilometers per hour </ItalicText>
+          <ItalicText>{city}</ItalicText> was <ItalicText>{temp} °C</ItalicText>
+          . The weather condition was described as{' '}
+          <ItalicText>{description}</ItalicText>. Wind was blowing at the speed
+          of <ItalicText>{windSpeed} kilometers per hour </ItalicText>
           from the <ItalicText>{windDirectionDescription}</ItalicText>.
         </Typography>
         <FlexBox flexWrap='wrap' gap={2} mt={2}>
@@ -55,7 +74,7 @@ function ThrowbackCard({ city, throwback, throwbackDate, currentTime }) {
           </ToolTip>
           <ToolTip title='wind speed'>
             <FlexBox gap={0.5}>
-              <Waves />
+              <Air />
               <Typography>{`${windSpeed} km/h`}</Typography>
             </FlexBox>
           </ToolTip>
@@ -66,9 +85,3 @@ function ThrowbackCard({ city, throwback, throwbackDate, currentTime }) {
 }
 
 export default ThrowbackCard
-
-const ItalicText = ({ children }) => (
-  <Box component='span' fontWeight='500' fontStyle='italic'>
-    {children}
-  </Box>
-)

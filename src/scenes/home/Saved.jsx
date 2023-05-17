@@ -17,8 +17,13 @@ import {
   saveLocations,
   getSavedLocations,
 } from '../../utils/localStorage/savedLocationsStorage'
+import PropTypes from 'prop-types'
 
-function Saved() {
+Saved.propTypes = {
+  component: PropTypes.string,
+}
+
+function Saved({ component = 'section' }) {
   const [saved, setSaved] = useState(null)
 
   // USING LAYOUT FOR OPTIMIZATION, AVOID 'NO SAVED' FLASH ON MOUNT
@@ -63,7 +68,7 @@ function Saved() {
 
   return (
     <GridBox>
-      <Card sx={cardStyle}>
+      <Card sx={cardStyle} component={component}>
         <CardHeader
           sx={{ pt: 0, px: 0 }}
           title={
@@ -78,11 +83,11 @@ function Saved() {
             <FlexBox type='center' width={1} gap={2} mb={2}>
               <FlexBox gap={1} color={blue}>
                 <Circle size={6} sx={{ fontSize: 6 }} />
-                <Typography fontWeight={500}>weekly</Typography>
+                <Typography fontWeight={500}>week</Typography>
               </FlexBox>
               <FlexBox gap={1} color={orange}>
                 <Circle sx={{ fontSize: 6 }} />
-                <Typography fontWeight={500}>hourly</Typography>
+                <Typography fontWeight={500}>day</Typography>
               </FlexBox>
             </FlexBox>
           ) : null}
@@ -110,7 +115,7 @@ function Saved() {
           ) : (
             <GridBox sx={noSavedContainerStyle}>
               <Typography>Your saved locations will appear here.</Typography>
-              <Typography>{`To save a location's weekly or daily weather, click on the heart nex to it.`}</Typography>
+              <Typography>{`To save a location's weekly or daily weather, click on the heart next to it.`}</Typography>
             </GridBox>
           )}
         </CardContent>

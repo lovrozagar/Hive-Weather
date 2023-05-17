@@ -1,19 +1,18 @@
-import { useEffect, useMemo } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { Container } from '@mui/material'
 import GridBox from '../../components/GridBox'
-import { Box, Card, Container } from '@mui/material'
-import useFetchForecastData from '../../api/useFetchForecastData'
-import DayCard from './DayCard'
-import Map from './Map'
 import CityTitle from '../../components/CityTitle'
+import DayCard from './DayCard'
 import CurrentCard from './CurrentCard'
 import ThrowbackCard from './ThrowbackCard'
+import Map from './Map'
+
+import { useMemo } from 'react'
+import { useParams } from 'react-router-dom'
+import useFetchForecastData from '../../api/useFetchForecastData'
 import useFetchCurrentWeatherData from '../../api/useFetchThrowbackWeatherData'
 
 function Forecast() {
   const { city, country, countryCode, latitude, longitude } = useParams()
-  const navigate = useNavigate()
-  console.log(latitude, longitude)
 
   // TAKE PARAM COORDINATES, RETURN DOTS INSTEAD OF UNDERSCORES, DONE BECAUSE DOTS ARE NOT ALLOWED
   const lat = useMemo(() => parseFloat(latitude.replace('_', '.')), [latitude])
@@ -25,25 +24,37 @@ function Forecast() {
   const [timezone, current, forecast] = useFetchForecastData(lat, lng)
   const [throwback, throwbackDate] = useFetchCurrentWeatherData(lat, lng)
 
-  const handleMoreDetailsClick = (dayIndex) =>
-    navigate(
-      `/hive-weather/hourly/${city}/${timezone
-        .split('/')
-        .join('_')}/${latitude}/${longitude}/${dayIndex}`
-    )
+  const getDayLink = (dayIndex) => {
+    const timezoneUrlFormat = timezone.split('/').join('-')
+    // RATHER THAN PASSING ONLY THE INDEX, MAKING THE DAY PART OF THE LINK MORE READABLE FOR THE USER AND BETTER SEO, GETTING ONLY INDEX BACK IN HOURLY SCENE
+    const dayUrlFormat =
+      dayIndex === 0 ? 'today' : dayIndex === 1 ? 'tomorrow' : `day-${dayIndex}`
 
+    return `/hive-weather/hourly/${city}/${country}/${countryCode}/${timezoneUrlFormat}/${latitude}/${longitude}/${dayUrlFormat}`
+  }
+
+  const gridStyle = {
+    alignItems: 'start',
+    '@media (min-width: 600px)': {
+      gridTemplateColumns: '1fr auto',
+    },
+  }
   return (
-    <Container>
+    <Container component='main'>
       <CityTitle
         city={city}
         country={country}
         countryCode={countryCode}
-        lat={lat}
-        lng={lng}
+        lat={lat.toString()}
+        lng={lng.toString()}
         sx={{ mb: 2 }}
       />
-      <GridBox type='1fr auto' gap={3} sx={{ alignItems: 'start' }}>
-        <GridBox type='repeat(auto-fit, minmax(250px, 1fr))' gap={2}>
+      <GridBox gap={3} sx={gridStyle}>
+        <GridBox
+          component='section'
+          type='repeat(auto-fit, minmax(250px, 1fr))'
+          gap={2}
+        >
           {forecast
             ? forecast.time.map((date, index) => (
                 <DayCard
@@ -51,16 +62,19 @@ function Forecast() {
                   forecast={forecast}
                   date={date}
                   index={index}
-                  onClick={handleMoreDetailsClick}
+                  link={getDayLink(index)}
                 />
               ))
             : null}
         </GridBox>
-        <GridBox sx={{ m: '0 auto' }} gap={3}>
-          {current ? <CurrentCard city={city} current={current} /> : null}
-          <Map coordinates={{ lat, lng }} />
+        <GridBox component='aside' sx={{ m: '0 auto' }} gap={3}>
+          {current ? (
+            <CurrentCard component='article' city={city} current={current} />
+          ) : null}
+          {/* {lat && lng && <Map coordinates={{ lat, lng }} />} */}
           {current && throwback ? (
             <ThrowbackCard
+              component='article'
               city={city}
               throwback={throwback}
               throwbackDate={throwbackDate}

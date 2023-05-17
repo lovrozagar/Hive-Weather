@@ -1,5 +1,13 @@
 import { Box } from '@mui/material'
 
+import PropTypes from 'prop-types'
+
+GridBox.propTypes = {
+  type: PropTypes.string,
+  children: PropTypes.node,
+  sx: PropTypes.object,
+}
+
 function GridBox({ type, children, sx, ...props }) {
   const styling = {
     display: 'grid',

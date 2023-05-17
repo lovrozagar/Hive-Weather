@@ -4,10 +4,7 @@ const useFetchCurrentWeatherData = (latitude, longitude) => {
   const [currentData, setCurrentData] = useState(null)
 
   const fetchCurrentWeatherData = useCallback(async () => {
-    if (!latitude || !longitude) {
-      setCurrentData(null)
-      return
-    }
+    if (!latitude || !longitude) return
 
     try {
       const response = await fetch(

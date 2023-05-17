@@ -11,8 +11,13 @@ import GridBox from '../../components/GridBox'
 import SavedItem from './SavedItem'
 
 import { useMemo } from 'react'
+import PropTypes from 'prop-types'
 
-function Popular() {
+Popular.propTypes = {
+  component: PropTypes.string,
+}
+
+function Popular({ component = 'section' }) {
   const popular = useMemo(
     () => [
       {
@@ -22,13 +27,13 @@ function Popular() {
       },
       {
         city: 'New York',
-        country: 'USA',
-        link: '/hive-weather/forecast/New%20York/USA/US/40_7127753/-74_0059728',
+        country: 'United States of America',
+        link: '/hive-weather/forecast/New%20York/United%20States%20of%20America/US/40_7127753/-74_0059728',
       },
       {
-        city: 'Tokyo',
-        country: 'Japan',
-        link: '/hive-weather/forecast/T%C5%8Dky%C5%8D/Tokio,%20Japan/JP/35_6803997/139_7690174',
+        city: 'Tōkyō',
+        country: 'Tokio, Japan',
+        link: '/hive-weather/forecast/Tōkyō/Tokio,%20Japan/JP/35_6803997/139_7690174',
       },
       {
         city: 'London',
@@ -37,8 +42,8 @@ function Popular() {
       },
       {
         city: 'Dubai',
-        country: 'UAE',
-        link: '/hive-weather/forecast/Dubai/UAE/AE/25_2048493/55_2707828',
+        country: 'United Arab Emirates',
+        link: '/hive-weather/forecast/Dubai/United%20Arab%20Emirates/AE/25_2048493/55_2707828',
       },
     ],
     []
@@ -59,7 +64,7 @@ function Popular() {
 
   return (
     <GridBox>
-      <Card sx={cardStyle}>
+      <Card sx={cardStyle} component={component}>
         <CardHeader
           sx={{ pt: 0, px: 0 }}
           title={

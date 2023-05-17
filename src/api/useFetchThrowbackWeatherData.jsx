@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import getRandomYearTodaysDate from '../utils/getRandomYearTodaysDate'
+import getRandomYearTodaysDate from '../utils/datetime/getRandomYearTodaysDate'
 
 const useFetchCurrentWeatherData = (latitude, longitude) => {
   const [throwbackData, setThrowbackData] = useState([null, null])
@@ -20,7 +20,6 @@ const useFetchCurrentWeatherData = (latitude, longitude) => {
     )
 
     const json = await response.json()
-    console.log('throwback!!!', json)
 
     setThrowbackData([json.hourly, throwbackDate])
   }, [latitude, longitude])

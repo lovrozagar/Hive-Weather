@@ -6,11 +6,6 @@ import {
   Typography,
   Button,
 } from '@mui/material'
-import FlexBox from './FlexBox'
-import GridBox from './GridBox'
-import LikeSaveButton from './LikeSaveButton'
-import CopyLinkButton from './CopyLinkButton'
-import CountryIcon from './CountryIcon'
 import {
   LocationOffOutlined,
   Thermostat,
@@ -19,11 +14,16 @@ import {
   Brightness5Outlined as Day,
   Brightness4Outlined as Night,
 } from '@mui/icons-material'
+import FlexBox from './FlexBox'
+import GridBox from './GridBox'
+import CountryIcon from './CountryIcon'
+import LikeSaveButton from './LikeSaveButton'
+import CopyLinkButton from './CopyLinkButton'
 import ToolTip from './ToolTip'
 
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import getDescription from '../utils/getDescription'
+import getDescription from '../utils/weather/getDescription'
 
 CityTitle.propTypes = {
   city: PropTypes.string.isRequired,
@@ -35,6 +35,7 @@ CityTitle.propTypes = {
   isHome: PropTypes.bool,
   description: PropTypes.string,
   weather: PropTypes.object,
+  component: PropTypes.string,
 }
 
 function CityTitle({
@@ -44,14 +45,20 @@ function CityTitle({
   lat,
   lng,
   sx,
-  isHome = false,
   description,
   weather,
+  isHome = false,
+  component = 'section',
   ...props
 }) {
   const latStr = lat?.toString().replace('.', '_')
   const lonStr = lng?.toString().replace('.', '_')
 
+  const cardStyle = {
+    pl: 1,
+    color: 'tone.light',
+    ...sx,
+  }
   const containerStyle = {
     gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
     '& > :nth-of-type(1)': {
@@ -95,14 +102,15 @@ function CityTitle({
   }
 
   return (
-    <Card {...props} sx={{ pl: 1, color: 'tone.light', ...sx }}>
-      <GridBox sx={containerStyle}>
+    <Card {...props} sx={cardStyle}>
+      <GridBox sx={containerStyle} component={component}>
         <CardHeader
           avatar={
             countryCode ? (
               <CountryIcon
                 height={28}
                 width={28}
+                type='title'
                 countryCode={
                   countryCode !== 'no-country-code' ? countryCode : null
                 }
@@ -123,7 +131,7 @@ function CityTitle({
           subheader={
             <Typography
               variant='h6'
-              fontWeight='300'
+              fontWeight='400'
               sx={{ color: 'tone.lightLow' }}
             >
               {description || `${lat}°N ${lng}°E`}
@@ -143,11 +151,12 @@ function CityTitle({
                 </Link>
               ) : (
                 <Button
+                  variant='outlined'
                   href={
                     'https://www.google.com/search?q=How+to+turn+on+browser+location'
                   }
                   target='_blank'
-                  variant='outlined'
+                  rel='noopener noreferrer'
                   sx={buttonStyle}
                 >
                   Location help
@@ -184,7 +193,7 @@ function CityTitle({
                 </ToolTip>
               </FlexBox>
               <FlexBox>
-                <ToolTip title='temperature'>
+                <ToolTip title='wind direction'>
                   <FlexBox gap={0.5}>
                     <DoubleArrow
                       sx={{
@@ -196,7 +205,7 @@ function CityTitle({
                 </ToolTip>
               </FlexBox>
               <FlexBox>
-                <ToolTip title='temperature'>
+                <ToolTip title='wind speed'>
                   <FlexBox gap={0.5}>
                     <Air />
                     <Typography>{`${weather.windspeed} km/h`}</Typography>
@@ -204,7 +213,7 @@ function CityTitle({
                 </ToolTip>
               </FlexBox>
               <FlexBox>
-                <ToolTip title='temperature'>
+                <ToolTip title='ambient'>
                   <FlexBox gap={0.5}>
                     {weather.is_day > 0 ? <Day /> : <Night />}
                     <Typography>{`${

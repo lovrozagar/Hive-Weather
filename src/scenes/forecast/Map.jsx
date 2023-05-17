@@ -7,14 +7,11 @@ Map.propTypes = {
 }
 
 function Map({ coordinates }) {
-  const mapStyle = {
-    width: '450px',
-    aspectRatio: '1/1',
-  }
+  const { lat, lng } = coordinates
 
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyAO1ey3FsygPJn0Xo-4eDhbhHQFMVmql5Y',
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
   })
 
   const options = {
@@ -31,24 +28,31 @@ function Map({ coordinates }) {
     fullscreenControl: true,
   }
 
-  if (loadError) return <div>Error loading maps</div>
-  if (!isLoaded) return <div>Loading maps</div>
-
-  const { lat, lng } = coordinates
-
-  const handleLoad = (map) => {
-    // console.log('Map loaded:', map)
+  const containerStyle = {
+    display: 'inline-block',
+    width: '100%',
+    maxWidth: { xs: '100%', sm: 450 },
+  }
+  const mapStyle = {
+    aspectRatio: '1/1',
   }
 
+  if (loadError) return <Box>Error loading maps</Box>
+  if (!isLoaded) return <Box>Loading maps</Box>
+
   return (
-    <Box display='inline-block' borderRadius={2} overflow='hidden !important'>
+    <Box
+      sx={containerStyle}
+      borderRadius={2}
+      overflow='hidden !important'
+      // HIDE OVERFLOW OVER BORDER RADIUS
+    >
       {isLoaded ? (
         <GoogleMap
           mapContainerStyle={mapStyle}
           center={coordinates}
           zoom={10}
           controlsSize={5}
-          onLoad={handleLoad}
           options={options}
         >
           <MarkerF position={{ lat, lng }} visible={true} />

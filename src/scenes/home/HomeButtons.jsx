@@ -23,7 +23,7 @@ function HomeButtons() {
         sx={{ py: 1.135, px: 3, w: 1 }}
       >
         <FlexBox gap={1}>
-          <DescriptionOutlined /> About
+          <DescriptionOutlined /> Docs
         </FlexBox>
       </Button>
       <Button

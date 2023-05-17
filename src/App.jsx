@@ -1,23 +1,26 @@
-import { useState, useMemo, useLayoutEffect } from 'react'
+import { useState, useMemo, useLayoutEffect, createContext } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import AppBar from './scenes/appBar/AppBar'
 import Home from './scenes/home/Home'
 import Forecast from './scenes/forecast/Forecast'
 import Hourly from './scenes/hourly/Hourly'
-import Error from './scenes/Error'
+import Docs from './scenes/docs/Docs'
+import Error from './scenes/error/Error'
 
 import { createTheme } from '@mui/material'
 import { themeSettings } from './theme'
 import { ThemeProvider } from '@emotion/react'
-import { CssBaseline, Button } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import {
   getSavedModeOption,
   saveModeOption,
 } from './utils/localStorage/themeStorage'
 
+export const ModeContext = createContext()
+
 function App() {
-  const [mode, setMode] = useState('light')
+  const [mode, setMode] = useState('dark')
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
   const handleModeSwitch = () => {
@@ -36,20 +39,22 @@ function App() {
     <Router>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppBar />
-        <Button onClick={handleModeSwitch}>Theme</Button>
-        <Routes>
-          <Route path='/hive-weather/' element={<Home />} />
-          <Route
-            path='/hive-weather/forecast/:city/:country/:countryCode/:latitude/:longitude'
-            element={<Forecast />}
-          />
-          <Route
-            path='/hive-weather/hourly/:city/:country/:countryCode/:timezone/:latitude/:longitude/:dayIndex'
-            element={<Hourly />}
-          />
-          <Route path='*' element={<Error />} />
-        </Routes>
+        <ModeContext.Provider value={{ mode, handleModeSwitch }}>
+          <AppBar />
+          <Routes>
+            <Route path='/hive-weather/' element={<Home />} />
+            <Route
+              path='/hive-weather/forecast/:city/:country/:countryCode/:latitude/:longitude'
+              element={<Forecast />}
+            />
+            <Route
+              path='/hive-weather/hourly/:city/:country/:countryCode/:timezone/:latitude/:longitude/:day'
+              element={<Hourly />}
+            />
+            <Route path='/hive-weather/docs' element={<Docs />} />
+            <Route path='*' element={<Error />} />
+          </Routes>
+        </ModeContext.Provider>
       </ThemeProvider>
     </Router>
   )

@@ -1,7 +1,9 @@
-import PropTypes from 'prop-types'
 import { useTheme, Button, Typography } from '@mui/material'
 import { Launch } from '@mui/icons-material'
 import FlexBox from '../../components/FlexBox'
+
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 SavedItem.propTypes = {
   location: PropTypes.object.isRequired,
@@ -11,18 +13,20 @@ function SavedItem({ location }) {
   const { city, country, link } = location
 
   const theme = useTheme().palette
-  const greyBackground = theme.neutral.light
-  const greyBackgroundHover = theme.neutral.lightMedium
 
   const buttonStyle = {
-    display: 'flex',
-    textAlign: 'start',
-    transition: 'none',
-    py: 1,
-    textTransform: 'none',
-    bgcolor: greyBackground,
-    '&:hover': {
-      bgcolor: greyBackgroundHover,
+    '&&': {
+      display: 'flex',
+      py: 1,
+      textAlign: 'start',
+      textTransform: 'none',
+      bgcolor: theme.tone.darkNormal,
+      '&:hover': {
+        bgcolor: theme.tone.darkLow,
+      },
+      '&.MuiButtonBase-root': {
+        transition: 'none',
+      },
     },
   }
   const launchIconStyle = {
@@ -35,11 +39,11 @@ function SavedItem({ location }) {
 
   return (
     <Button
-      disableRipple
       variant='text'
       color='tone'
+      LinkComponent={Link}
+      to={link}
       sx={buttonStyle}
-      href={link}
     >
       <FlexBox gap={0.5} width={1}>
         <Typography noWrap={true} sx={typographyStyle}>

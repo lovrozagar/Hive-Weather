@@ -15,7 +15,7 @@ function AppTitle({ sx, component = 'h3', main = false }) {
   const theme = useTheme().palette
 
   const fluidGray = theme.tone.lightLow
-  const lightGray = theme.constant.lightGray
+  const lightGray = theme.lightPreserved.lightGray
 
   const containerStyle = {
     ...sx,
@@ -23,11 +23,11 @@ function AppTitle({ sx, component = 'h3', main = false }) {
   const fontStyle = {
     position: 'relative',
     bottom: 1,
-    letterSpacing: -1,
+    display: main ? { xs: 'none', md: 'block' } : 'auto',
     fontFamily: ['Roboto Mono', 'monospace'].join(','),
     fontWeight: '500',
+    letterSpacing: -1,
     color: main ? lightGray : fluidGray,
-    display: main ? { xs: 'none', md: 'block' } : 'auto',
   }
 
   return (

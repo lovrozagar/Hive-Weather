@@ -1,5 +1,5 @@
 import {
-  Waves,
+  Air,
   Grain,
   DoubleArrow,
   Opacity as Droplet,
@@ -10,8 +10,6 @@ import {
   Speed as Barometer,
   ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material'
-import {} from '@mui/icons-material'
-
 import {
   styled,
   Card,
@@ -28,10 +26,10 @@ import Tilt from 'react-parallax-tilt'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 
-import getDescription from '../../utils/getDescription'
-import getHourFromFullTime from '../../utils/getHourFromFullTime'
-import getWeatherLogo from '../../utils/getWeatherLogo'
-import getHourParagraphText from '../../utils/getHourParagraphText'
+import getDescription from '../../utils/weather/getDescription'
+import getHourFromFullTime from '../../utils/datetime/getHourFromFullTime'
+import getWeatherLogo from '../../utils/weather/getWeatherLogo'
+import getHourParagraphText from '../../utils/weather/getHourParagraphText'
 
 HourCard.propTypes = {
   hours: PropTypes.object.isRequired,
@@ -59,12 +57,23 @@ function HourCard({ hours, hour, index }) {
     is_day: { [index]: isDay },
   } = hours
 
-  console.log(windSpeed)
-
-  const typographyStyle = {
-    overflow: 'auto',
-    textOverflow: 'ellipsis',
-    wordBreak: 'keep-all',
+  const containerStyle = {
+    alignItems: 'start',
+    display: { xs: 'grid', sm: 'flex' },
+    justifyContent: { xs: 'center', sm: 'start' },
+    justifyItems: { xs: 'center', sm: 'none' },
+  }
+  const cardMediaStyle = {
+    height: '50px',
+    width: '50px',
+    aspectRatio: '1/1',
+  }
+  const expandMoreStyle = {
+    alignSelf: 'end',
+    mt: 0.5,
+    ml: { xs: '0', sm: 'auto' },
+    mr: 0.5,
+    mb: 0.5,
   }
 
   return (
@@ -80,7 +89,7 @@ function HourCard({ hours, hour, index }) {
       style={{ width: '100%' }}
     >
       <Card>
-        <FlexBox sx={{ alignItems: 'start' }}>
+        <FlexBox flexWrap='wrap' sx={containerStyle}>
           <CardContent sx={{ pb: 1 }}>
             <Typography sx={{ pl: 0.75 }}>
               {getHourFromFullTime(hour)}
@@ -89,22 +98,18 @@ function HourCard({ hours, hour, index }) {
               component='img'
               image={getWeatherLogo(weatherCode, isDay)}
               alt='sun logo'
-              sx={{
-                height: '50px',
-                width: '50px',
-                aspectRatio: '1/1',
-              }}
+              sx={cardMediaStyle}
             />
           </CardContent>
-          <CardContent>
-            <FlexBox gap={1} mb={2} pl={0.25}>
+          <CardContent sx={{ py: { xs: 0, sm: 2 } }}>
+            <FlexBox flexWrap='wrap' gap={1} mb={2} pl={0.25}>
               <Typography>{`${Math.round(temperature)} °C`}</Typography>
               <Typography>|</Typography>
               <Typography>{`Feels like ${Math.round(feel)} °C`}</Typography>
               <Typography>|</Typography>
               <Typography>{getDescription(weatherCode)}</Typography>
             </FlexBox>
-            <FlexBox gap={2}>
+            <FlexBox gap={2} flexWrap='wrap'>
               <ToolTip title='chance of rain'>
                 <FlexBox gap={0.5}>
                   <Droplet />
@@ -127,18 +132,17 @@ function HourCard({ hours, hour, index }) {
               </ToolTip>
               <ToolTip title='wind speed'>
                 <FlexBox gap={0.5}>
-                  <Waves />
+                  <Air />
                   <Typography>{`${windSpeed} km/h`}</Typography>
                 </FlexBox>
               </ToolTip>
             </FlexBox>
           </CardContent>
           <ExpandMore
-            expand={expanded}
             onClick={handleExpandClick}
             aria-expanded={expanded}
             aria-label='show more'
-            sx={{ alignSelf: 'end', mr: 0.5, mb: 0.5 }}
+            sx={expandMoreStyle}
           >
             <ExpandMoreIcon />
           </ExpandMore>
@@ -146,7 +150,7 @@ function HourCard({ hours, hour, index }) {
         <Collapse in={expanded} timeout='auto' unmountOnExit>
           <Divider sx={{ mx: 1 }} />
           <CardContent sx={{ py: 2, px: 3 }}>
-            <FlexBox gap={2}>
+            <FlexBox gap={2} flexWrap='wrap'>
               <ToolTip title='visibility'>
                 <FlexBox gap={0.5}>
                   <VisibilityEye />
