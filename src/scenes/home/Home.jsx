@@ -1,4 +1,4 @@
-import { Container } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import GridBox from '../../components/GridBox'
 
 import CityTitle from '../../components/CityTitle'
@@ -7,44 +7,15 @@ import Popular from './Popular'
 import Steps from './Steps'
 import HomeButtons from './HomeButtons'
 
-import { useState } from 'react'
+import useFetchUserGeolocationData from '../../api/useFetchGeolocationData'
 import useFetchCurrentWeatherData from '../../api/useFetchCurrentWeatherData'
 
 function Home() {
-  const [userCoordinates, setUserCoordinates] = useState(null)
-  const [userPlace, setUserPlace] = useState(null)
+  const { userCoordinates, userPlace } = useFetchUserGeolocationData()
   const weatherData = useFetchCurrentWeatherData(
     userCoordinates?.latitude,
     userCoordinates?.longitude
   )
-
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(async (position) => {
-  //     setUserCoordinates(position?.coords)
-  //     console.log(position.coords.latitude)
-  //     console.log(position.coords.longitude)
-
-  //     // Call the Google Maps Geocoding API to get the address based on the user's coordinates
-  //     const response = await fetch(
-  //       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyAO1ey3FsygPJn0Xo-4eDhbhHQFMVmql5Y`
-  //     )
-  //     const data = await response.json()
-
-  //     // Extract the city, country, and country code from the address components
-  //     let city, country, countryCode
-  //     data.results[0].address_components.forEach((component) => {
-  //       if (component.types.includes('locality')) {
-  //         city = component.long_name
-  //       }
-  //       if (component.types.includes('country')) {
-  //         country = component.long_name
-  //         countryCode = component.short_name
-  //       }
-  //     })
-
-  //     setUserPlace({ city, country, countryCode })
-  //   })
-  // }, [])
 
   const gridStyle = {
     '& > :nth-of-type(1)': {
@@ -67,20 +38,22 @@ function Home() {
   }
 
   return (
-    <Container sx={{ pt: { md: 5 }, pb: 10 }}>
+    <Container component='main' sx={{ pt: { md: 5 }, pb: 10 }}>
       <GridBox type='1fr' sx={gridStyle} gap={3}>
         {userPlace !== null ? (
           <CityTitle
+            component='section'
             isHome={true}
             city={userPlace.city}
             country={userPlace?.country}
             countryCode={userPlace?.countryCode}
-            lat={userCoordinates.latitude}
-            lng={userCoordinates.longitude}
+            lat={userCoordinates?.latitude.toString()}
+            lng={userCoordinates?.longitude.toString()}
             weather={weatherData}
           />
         ) : (
           <CityTitle
+            component='section'
             isHome={true}
             city={'Location not found'}
             description='Please enable location service'
@@ -88,10 +61,14 @@ function Home() {
         )}
 
         <GridBox gap={3} mb='auto'>
-          <Saved />
-          <Popular />
+          <Saved component='section' />
+          <Popular component='section' />
         </GridBox>
-        <Steps />
+        <Box alignSelf='start'>
+          <Box component='summary'>
+            <Steps />
+          </Box>
+        </Box>
         <HomeButtons />
       </GridBox>
     </Container>
