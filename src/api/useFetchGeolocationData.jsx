@@ -1,51 +1,40 @@
 import { useEffect, useState } from 'react'
 
-const useFetchUserGeolocationData = () => {
+const useFetchGeolocationData = () => {
   const [userCoordinates, setUserCoordinates] = useState(null)
   const [userPlace, setUserPlace] = useState(null)
 
   useEffect(() => {
-    const fetchUserGeolocationData = async () => {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        // JS GEOLOCATION API
+    const fetchGeolocationData = async () => {
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject)
+        })
+
         setUserCoordinates(position?.coords)
 
-        try {
-          // GOOGLE GEOLOCATION API WITH THE COORDS
-          const prefix = 'https://maps.googleapis.com/maps/api/geocode/json?'
-          const latlng = `latlng=${position.coords.latitude},${position.coords.longitude}`
-          const googleKey = import.meta.env.VITE_GOOGLE_API_KEY
-          const key = `&key=${googleKey}`
+        const backendAbsolutePath =
+          'http://localhost:5000/api/google/geocoding?'
+        const latitude = `latitude=${position.coords.latitude}`
+        const longitude = `&longitude=${position.coords.longitude}`
 
-          const response = await fetch(`${prefix}${latlng}${key}`)
-          const data = await response.json()
-          console.log('geo', data)
+        const response = await fetch(
+          `${backendAbsolutePath}${latitude}${longitude}`
+        )
+        const json = await response.json()
+        console.log(json)
 
-          // GET CITY, COUNTRY AND COUNTRY CODE
-          let city, country, countryCode
-          data.results[0].address_components.forEach((component) => {
-            if (component.types.includes('locality')) {
-              city = component.long_name
-            }
-            if (component.types.includes('country')) {
-              country = component.long_name
-              countryCode = component.short_name
-            }
-          })
-
-          setUserPlace({ city, country, countryCode })
-          //
-        } catch (error) {
-          console.log(error)
-          setUserPlace(null)
-        }
-      })
+        setUserPlace(json)
+        //
+      } catch (error) {
+        console.log(error)
+      }
     }
 
-    fetchUserGeolocationData()
+    fetchGeolocationData()
   }, [])
 
   return { userCoordinates, userPlace }
 }
 
-export default useFetchUserGeolocationData
+export default useFetchGeolocationData
