@@ -4,14 +4,15 @@ import { Box } from '@mui/material'
 
 Map.propTypes = {
   coordinates: PropTypes.object,
+  googleKey: PropTypes.string,
 }
 
-function Map({ coordinates }) {
+function Map({ coordinates, googleKey }) {
   const { lat, lng } = coordinates
 
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+    googleMapsApiKey: googleKey,
   })
 
   const options = {
@@ -26,6 +27,7 @@ function Map({ coordinates }) {
     streetViewControl: false,
     zoomControl: true,
     fullscreenControl: true,
+    gestureHandling: 'none',
   }
 
   const containerStyle = {
@@ -47,7 +49,7 @@ function Map({ coordinates }) {
       overflow='hidden !important'
       // HIDE OVERFLOW OVER BORDER RADIUS
     >
-      {isLoaded ? (
+      {isLoaded && googleKey ? (
         <GoogleMap
           mapContainerStyle={mapStyle}
           center={coordinates}

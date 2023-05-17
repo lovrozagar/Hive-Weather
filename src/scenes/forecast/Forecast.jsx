@@ -8,11 +8,13 @@ import Map from './Map'
 
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
+import useFetchGoogleApiKey from '../../api/useFetchGoogleApiKey'
 import useFetchForecastData from '../../api/useFetchForecastData'
 import useFetchCurrentWeatherData from '../../api/useFetchThrowbackWeatherData'
 
 function Forecast() {
   const { city, country, countryCode, latitude, longitude } = useParams()
+  const googleKey = useFetchGoogleApiKey()
 
   // TAKE PARAM COORDINATES, RETURN DOTS INSTEAD OF UNDERSCORES, DONE BECAUSE DOTS ARE NOT ALLOWED
   const lat = useMemo(() => parseFloat(latitude.replace('_', '.')), [latitude])
@@ -30,7 +32,7 @@ function Forecast() {
     const dayUrlFormat =
       dayIndex === 0 ? 'today' : dayIndex === 1 ? 'tomorrow' : `day-${dayIndex}`
 
-    return `/hive-weather/hourly/${city}/${country}/${countryCode}/${timezoneUrlFormat}/${latitude}/${longitude}/${dayUrlFormat}`
+    return `/hive-weather-client/hourly/${city}/${country}/${countryCode}/${timezoneUrlFormat}/${latitude}/${longitude}/${dayUrlFormat}`
   }
 
   const gridStyle = {
@@ -71,7 +73,9 @@ function Forecast() {
           {current ? (
             <CurrentCard component='article' city={city} current={current} />
           ) : null}
-          {/* {lat && lng && <Map coordinates={{ lat, lng }} />} */}
+          {lat && lng && googleKey && (
+            <Map coordinates={{ lat, lng }} googleKey={googleKey} />
+          )}
           {current && throwback ? (
             <ThrowbackCard
               component='article'
