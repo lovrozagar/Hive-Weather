@@ -84,6 +84,21 @@ function AutocompleteCity() {
     }
   }
 
+  const handleGoIconClick = () => {
+    console.log(suggestions)
+    if (suggestions.length) {
+      const { name, region, countryCode, lat, lon } = suggestions[0]
+      const latStr = lat.toString().replace('.', '_')
+      const lonStr = lon.toString().replace('.', '_')
+
+      setAutocompleteRefresh((prevRefresh) => prevRefresh + 1)
+
+      navigate(
+        `/hive-weather/forecast/${name}/${region}/${countryCode}/${latStr}/${lonStr}`
+      )
+    }
+  }
+
   const isAlphanumeric = /^[a-zA-Z0-9\s]+$/.test(city)
 
   const containerPaperStyle = {
@@ -199,6 +214,7 @@ function AutocompleteCity() {
         color='primary'
         sx={{ p: '10px' }}
         aria-label='clear'
+        onClick={handleGoIconClick}
       >
         <Directions />
       </IconButton>
