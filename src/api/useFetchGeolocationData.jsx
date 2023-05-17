@@ -10,14 +10,13 @@ const useFetchUserGeolocationData = () => {
         // JS GEOLOCATION API
         setUserCoordinates(position?.coords)
 
-        if (!userCoordinates) return
-
         try {
           // GOOGLE GEOLOCATION API WITH THE COORDS
           const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyAO1ey3FsygPJn0Xo-4eDhbhHQFMVmql5Y`
           )
           const data = await response.json()
+          console.log('geo', data)
 
           // GET CITY, COUNTRY AND COUNTRY CODE
           let city, country, countryCode
@@ -41,7 +40,7 @@ const useFetchUserGeolocationData = () => {
     }
 
     fetchUserGeolocationData()
-  }, [userCoordinates])
+  }, [])
 
   return { userCoordinates, userPlace }
 }
