@@ -84,7 +84,10 @@ function AutocompleteCity() {
     }
   }
 
-  const handleGoIconClick = () => {
+  const handleGoIconClick = async () => {
+    // TIMEOUT FOR SUGGESTIONS TO ARRIVE
+    await new Promise((resolve) => setTimeout(resolve, 200))
+
     console.log(suggestions)
     if (suggestions.length) {
       const { name, region, countryCode, lat, lon } = suggestions[0]
@@ -126,7 +129,8 @@ function AutocompleteCity() {
   }
   const fontLightStyle = {
     mr: 1,
-    fontWeight: '300',
+    fontWeight: '400',
+    color: 'tone.lightLow',
   }
 
   return (
