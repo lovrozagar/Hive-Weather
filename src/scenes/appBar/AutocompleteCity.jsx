@@ -63,7 +63,7 @@ function AutocompleteCity() {
     return suggestions.length > 0
       ? suggestions.map(
           (suggestion) =>
-            `${suggestion.name}/${suggestion.region}/${suggestion.countryCode}/${suggestion.lat}/${suggestion.lon}`
+            `${suggestion.city}/${suggestion.country}/${suggestion.countryCode}/${suggestion.lat}/${suggestion.lng}`
         )
       : []
   }
@@ -72,14 +72,14 @@ function AutocompleteCity() {
 
   const handleChange = (e, value) => {
     if (value) {
-      const [name, country, countryCode, lat, lon] = value.split('/')
+      const [city, country, countryCode, lat, lng] = value.split('/')
       const latStr = lat.toString().replace('.', '_')
-      const lonStr = lon.toString().replace('.', '_')
+      const lngStr = lng.toString().replace('.', '_')
 
       setAutocompleteRefresh((prevRefresh) => prevRefresh + 1)
 
       navigate(
-        `/hive-weather/forecast/${name}/${country}/${countryCode}/${latStr}/${lonStr}`
+        `/hive-weather/forecast/${city}/${country}/${countryCode}/${latStr}/${lngStr}`
       )
     }
   }
@@ -90,14 +90,14 @@ function AutocompleteCity() {
 
     console.log(suggestions)
     if (suggestions.length) {
-      const { name, region, countryCode, lat, lon } = suggestions[0]
+      const { city, country, countryCode, lat, lng } = suggestions[0]
       const latStr = lat.toString().replace('.', '_')
-      const lonStr = lon.toString().replace('.', '_')
+      const lngStr = lng.toString().replace('.', '_')
 
       setAutocompleteRefresh((prevRefresh) => prevRefresh + 1)
 
       navigate(
-        `/hive-weather/forecast/${name}/${region}/${countryCode}/${latStr}/${lonStr}`
+        `/hive-weather/forecast/${city}/${country}/${countryCode}/${latStr}/${lngStr}`
       )
     }
   }
@@ -178,7 +178,7 @@ function AutocompleteCity() {
         )}
         sx={{ flex: 1 }}
         renderOption={(option) => {
-          const [name, region, countryCode, lat, lon] = option.key.split('/')
+          const [city, country, countryCode, lat, lng] = option.key.split('/')
           return (
             <Box key={uniqid()}>
               <Box component='li' {...option}>
@@ -191,15 +191,15 @@ function AutocompleteCity() {
                     />
                     <Typography noWrap sx={typographyStyle}>
                       <Box component='span' sx={{ mr: 1 }}>
-                        {name}
+                        {city}
                       </Box>
                       <Box component='span' sx={fontLightStyle}>
-                        {region !== 'no-country' ? region : null}
+                        {country !== 'no-country' ? country : null}
                       </Box>
                       <Box
                         component='span'
                         sx={fontLightStyle}
-                      >{`${lat}°N ${lon}°E`}</Box>
+                      >{`${lat}°N ${lng}°E`}</Box>
                     </Typography>
                   </FlexBox>
                 </Link>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
 const useFetchCitySuggestionsData = () => {
   const fetchCitySuggestionsData = useCallback(async (input) => {
@@ -11,7 +11,7 @@ const useFetchCitySuggestionsData = () => {
     const results = await new Promise((resolve, reject) => {
       autocompleteService.getPlacePredictions(options, (results, status) => {
         if (status !== 'OK') {
-          reject(status)
+          resolve([])
         }
         resolve(results)
       })
@@ -32,15 +32,18 @@ const useFetchCitySuggestionsData = () => {
           })
         })
 
+        const city = result.structured_formatting.main_text || 'no-city'
+        const country =
+          result.structured_formatting.secondary_text || 'no-country' // RETURN EMPTY STRING IN KOSOVO LIKE CASES WHERE COUNTRY IS NOT RETURNED
+        const countryCode =
+          details.address_components.find((component) =>
+            component.types.includes('country')
+          )?.short_name || 'no-country-code'
         const lat = details.geometry.location.lat()
-        const lon = details.geometry.location.lng()
-        const name = result.structured_formatting.main_text
-        const region = result.structured_formatting.secondary_text
-        const countryCode = details.address_components.find((component) =>
-          component.types.includes('country')
-        ).short_name
+        const lng = details.geometry.location.lng()
 
-        return { name, region, countryCode, lat, lon }
+        console.log({ city, country, countryCode, lat, lng })
+        return { city, country, countryCode, lat, lng }
       })
     )
 
