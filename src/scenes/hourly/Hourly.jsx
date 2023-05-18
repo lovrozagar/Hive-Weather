@@ -6,7 +6,6 @@ import HourCard from './HourCard'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ModeContext } from '../../App'
-import moment from 'moment-timezone'
 import ReactApexChart from 'react-apexcharts'
 import useFetchHourlyData from '../../api/useFetchHourlyData'
 
@@ -37,14 +36,18 @@ function Hourly() {
 
   const hours = useFetchHourlyData(lat, lng, dayIndex)
 
-  const MINUTE_TO_MILLISECOND_MULTIPLAYER = 60000
-  const TWO_HOUR_MILLISECOND_OFFSET = 7_200_000
-
   const getCurrentTimezoneMilliseconds = useCallback(() => {
-    const now = moment().tz(timezoneTzFormat)
-    const offset = now._offset * MINUTE_TO_MILLISECOND_MULTIPLAYER
+    try {
+      const options = { timeZone: timezoneTzFormat }
+      const datetime = new Date().toLocaleString('en-US', options)
+      const milliseconds = new Date(datetime).getTime()
 
-    return Date.now() + offset - TWO_HOUR_MILLISECOND_OFFSET
+      return milliseconds
+      //
+    } catch (error) {
+      // IF WRONG TIMEZONE, AVOID CRASH, RETURN CURRENT USER MILLISECONDS
+      return Date.now()
+    }
   }, [timezoneTzFormat])
 
   const chartOptions = useMemo(() => {
