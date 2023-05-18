@@ -13,7 +13,7 @@ const useFetchThrowbackWeatherData = (latitude, longitude) => {
 
     try {
       const backendAbsolutePath =
-        'https://hive-weather-server.onrender.com/weather/throwback?'
+        'https://hive-weather-server.onrender.com/api/weather/throwback?'
 
       const response = await fetch(
         `${backendAbsolutePath}latitude=${latitude}&longitude=${longitude}`
