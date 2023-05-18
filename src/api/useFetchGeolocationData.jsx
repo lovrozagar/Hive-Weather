@@ -14,7 +14,7 @@ const useFetchGeolocationData = () => {
         setUserCoordinates(position?.coords)
 
         const backendAbsolutePath =
-          'http://localhost:5000/api/google/geocoding?'
+          'https://hive-weather-server.onrender.com/api/google/geocoding?'
         const latitude = `latitude=${position.coords.latitude}`
         const longitude = `&longitude=${position.coords.longitude}`
 

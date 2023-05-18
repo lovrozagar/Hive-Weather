@@ -9,11 +9,14 @@ const useFetchThrowbackWeatherData = (latitude, longitude) => {
       return
     }
 
+    console.log(latitude, longitude)
+
     try {
-      const backendAbsolutePath = 'http://localhost:5000/api/weather/throwback?'
+      const backendAbsolutePath =
+        'https://hive-weather-server.onrender.com/weather/throwback?'
 
       const response = await fetch(
-        `${backendAbsolutePath}?latitude=${latitude}&longitude=${longitude}`
+        `${backendAbsolutePath}latitude=${latitude}&longitude=${longitude}`
       )
       const json = await response.json()
       const { hourly, throwbackDate } = json

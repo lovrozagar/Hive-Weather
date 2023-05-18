@@ -1,8 +1,8 @@
 {
-  "name": "hive-weather",
+  "name": "hive-weather-client",
   "private": true,
   "version": "0.0.0",
-  "proxy": "http://localhost:5000",
+  "proxy": "https://hive-weather-server.onrender.com",
   "type": "module",
   "scripts": {
     "dev": "vite",

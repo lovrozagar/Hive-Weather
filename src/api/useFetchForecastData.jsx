@@ -6,7 +6,8 @@ const useFetchForecastData = (latitude, longitude) => {
   const fetchForecastData = useCallback(async () => {
     if (!latitude || !longitude) return
 
-    const backendAbsolutePath = 'http://localhost:5000/api/weather/forecast?'
+    const backendAbsolutePath =
+      'https://hive-weather-server.onrender.com/api/weather/forecast?'
 
     try {
       const response = await fetch(
