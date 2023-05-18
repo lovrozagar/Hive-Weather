@@ -118,7 +118,7 @@ function SideMenu() {
                           ? handleModeSwitch
                           : null
                       }
-                      sx={{ color: 'tone.light', orderRadius: 1 }}
+                      sx={{ color: 'tone.light', borderRadius: 1 }}
                     >
                       <ListItemIcon>{getIcon(option)}</ListItemIcon>
                       <ListItemText
