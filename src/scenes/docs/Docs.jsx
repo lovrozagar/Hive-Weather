@@ -121,6 +121,24 @@ function Docs() {
           },
         ],
       },
+      {
+        title: 'Zaključak',
+        id: 'conclusion',
+        paragraphs: [
+          {
+            name: 'Što sam naučio',
+            text: 'Tijekom razvijanja ove aplikacije stekao sam snažnije razumijevanje Reacta, poboljšao rad s API-evima, korištenje hookova i routanja (react-router-dom). Unatoč nedostatku prethodnog iskustva s razvojem backenda, uspješno sam stvorio backend koristeći Node.js i Express. Ovaj uspjeh omogućio mi je uspostavu veze između frontend-a i backend-a, dohvaćanje podataka s vanjskih API-eva na backend pa slanje na frontend. Osim toga, proširio sam svoje vještine hostinga izvan Github Pages, uspješno sam objavio frontend na Netlify i backend na Render.',
+          },
+          {
+            name: 'Što bih napravio drugacije',
+            text: 'Za bolju tipizaciju i održiviji kod mogao sam koristiti TypeScript medutim zbog neiskustva s backendom i ograničenog vremena, odlucio sam se na JavaScript koji obavio posao ali vjerojatno i oduzeo vremena koliko i uštedio. Trebao sam usvojiti strategiju / konvenciju za imenovanje.',
+          },
+          {
+            name: 'Što se može poboljšati',
+            text: 'Može se dodati React Query paket za automatsko "cache" -anje, osvježavanje podataka i rukovanje greškama na jednostavan način. Također se može dodati autentifikacija i korisnički račun kako bih se korisnicima omogućila prijava. Na taj način bi se spremljene lokacije vezale za njihov račun umjesto da se spremaju u lokalnu pohranu.',
+          },
+        ],
+      },
     ],
     []
   )
