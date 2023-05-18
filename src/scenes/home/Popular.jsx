@@ -23,27 +23,27 @@ function Popular({ component = 'section' }) {
       {
         city: 'Paris',
         country: 'France',
-        link: '/hive-weather/forecast/Paris/France/FR/48_856614/2_3522219',
+        link: '/forecast/Paris/France/FR/48_856614/2_3522219',
       },
       {
         city: 'New York',
         country: 'United States of America',
-        link: '/hive-weather/forecast/New%20York/United%20States%20of%20America/US/40_7127753/-74_0059728',
+        link: '/forecast/New%20York/United%20States%20of%20America/US/40_7127753/-74_0059728',
       },
       {
         city: 'Tōkyō',
         country: 'Tokio, Japan',
-        link: '/hive-weather/forecast/Tōkyō/Tokio,%20Japan/JP/35_6803997/139_7690174',
+        link: '/forecast/Tōkyō/Tokio,%20Japan/JP/35_6803997/139_7690174',
       },
       {
         city: 'London',
         country: 'United Kingdom',
-        link: '/hive-weather/forecast/London/United%20Kingdom/GB/51_5072178/-0_1275862',
+        link: '/forecast/London/United%20Kingdom/GB/51_5072178/-0_1275862',
       },
       {
         city: 'Dubai',
         country: 'United Arab Emirates',
-        link: '/hive-weather/forecast/Dubai/United%20Arab%20Emirates/AE/25_2048493/55_2707828',
+        link: '/forecast/Dubai/United%20Arab%20Emirates/AE/25_2048493/55_2707828',
       },
     ],
     []

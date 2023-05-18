@@ -33,7 +33,7 @@ function AppTitle({ sx, component = 'h3', main = false }) {
   return (
     <Box sx={containerStyle}>
       {main ? (
-        <Link to='/hive-weather/' style={{ textDecoration: 'none' }}>
+        <Link to='/' style={{ textDecoration: 'none' }}>
           <FlexBox type='left' gap={0.5}>
             <Box height='42px' width='42px'>
               <Box

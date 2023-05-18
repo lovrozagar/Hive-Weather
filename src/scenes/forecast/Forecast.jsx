@@ -32,7 +32,7 @@ function Forecast() {
     const dayUrlFormat =
       dayIndex === 0 ? 'today' : dayIndex === 1 ? 'tomorrow' : `day-${dayIndex}`
 
-    return `/hive-weather-client/hourly/${city}/${country}/${countryCode}/${timezoneUrlFormat}/${latitude}/${longitude}/${dayUrlFormat}`
+    return `/hourly/${city}/${country}/${countryCode}/${timezoneUrlFormat}/${latitude}/${longitude}/${dayUrlFormat}`
   }
 
   const gridStyle = {

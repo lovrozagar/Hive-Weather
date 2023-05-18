@@ -1,7 +1,7 @@
 {
   "name": "hive-weather-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "proxy": "https://hive-weather-server.onrender.com",
   "type": "module",
   "scripts": {

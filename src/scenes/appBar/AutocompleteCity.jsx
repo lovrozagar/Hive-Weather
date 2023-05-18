@@ -79,7 +79,7 @@ function AutocompleteCity() {
       setAutocompleteRefresh((prevRefresh) => prevRefresh + 1)
 
       navigate(
-        `/hive-weather/forecast/${city}/${country}/${countryCode}/${latStr}/${lngStr}`
+        `/forecast/${city}/${country}/${countryCode}/${latStr}/${lngStr}`
       )
     }
   }
@@ -97,7 +97,7 @@ function AutocompleteCity() {
       setAutocompleteRefresh((prevRefresh) => prevRefresh + 1)
 
       navigate(
-        `/hive-weather/forecast/${city}/${country}/${countryCode}/${latStr}/${lngStr}`
+        `/forecast/${city}/${country}/${countryCode}/${latStr}/${lngStr}`
       )
     }
   }

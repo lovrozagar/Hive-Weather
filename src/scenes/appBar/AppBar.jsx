@@ -50,7 +50,7 @@ function AppBar() {
         </Box>
         <FlexBox type='end' gap={1}>
           <Box sx={optionButtonStyle}>
-            <Link to='/hive-weather/docs'>
+            <Link to='/docs'>
               <Button color='lightPreserved' sx={{ mr: 1 }}>
                 Docs
               </Button>

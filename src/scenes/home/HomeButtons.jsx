@@ -16,7 +16,7 @@ function HomeButtons() {
     <FlexBox type='center' sx={containerStyle}>
       <Button
         component={Link}
-        to='/hive-weather/docs'
+        to='/docs'
         size='large'
         variant='outlined'
         color='primary'

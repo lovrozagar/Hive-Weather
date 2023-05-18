@@ -52,9 +52,9 @@ function SideMenu() {
   const handleAppSceneClick = (option) => {
     switch (option.toLowerCase()) {
       case 'home':
-        return '/hive-weather/'
+        return '/'
       case 'docs':
-        return 'hive-weather/docs'
+        return '/docs'
       default:
         return null
     }

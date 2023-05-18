@@ -42,16 +42,16 @@ function App() {
         <ModeContext.Provider value={{ mode, handleModeSwitch }}>
           <AppBar />
           <Routes>
-            <Route path='/hive-weather/' element={<Home />} />
+            <Route path='/' element={<Home />} />
             <Route
-              path='/hive-weather/forecast/:city/:country/:countryCode/:latitude/:longitude'
+              path='/forecast/:city/:country/:countryCode/:latitude/:longitude'
               element={<Forecast />}
             />
             <Route
-              path='/hive-weather/hourly/:city/:country/:countryCode/:timezone/:latitude/:longitude/:day'
+              path='/hourly/:city/:country/:countryCode/:timezone/:latitude/:longitude/:day'
               element={<Hourly />}
             />
-            <Route path='/hive-weather/docs' element={<Docs />} />
+            <Route path='/docs' element={<Docs />} />
             <Route path='*' element={<Error />} />
           </Routes>
         </ModeContext.Provider>

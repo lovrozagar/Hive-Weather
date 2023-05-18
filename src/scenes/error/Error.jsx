@@ -54,7 +54,7 @@ function Error() {
             Sorry, but the winds of fate have blown you off course and onto a
             page that does not exist.
           </Typography>
-          <Link to='/hive-weather/' style={linkStyle}>
+          <Link to='/' style={linkStyle}>
             <Button
               size='large'
               variant='outlined'

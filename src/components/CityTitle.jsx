@@ -143,7 +143,7 @@ function CityTitle({
             <>
               {weather ? (
                 <Link
-                  to={`/hive-weather/forecast/${city}/${country}/${countryCode}/${latStr}/${lonStr}`}
+                  to={`/forecast/${city}/${country}/${countryCode}/${latStr}/${lonStr}`}
                 >
                   <Button target='_blank' variant='outlined' sx={buttonStyle}>
                     See more
