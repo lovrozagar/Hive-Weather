@@ -52,7 +52,7 @@ function Hourly() {
     return {
       chart: {
         type: 'area',
-        foreColor: theme.tone.light,
+        foreColor: theme.tone.middle,
       },
       tooltip: {
         theme: mode,
@@ -98,7 +98,7 @@ function Hourly() {
   }, [hours, currentTime, chartOptions])
 
   return (
-    <Container component='main'>
+    <Container component='main' sx={{ pb: 10 }}>
       <CityTitle
         component='section'
         city={city}

@@ -21,6 +21,7 @@ import {
   IconButton,
 } from '@mui/material'
 import FlexBox from '../../components/FlexBox'
+import GridBox from '../../components/GridBox'
 import ToolTip from '../../components/ToolTip'
 import Tilt from 'react-parallax-tilt'
 import PropTypes from 'prop-types'
@@ -58,10 +59,29 @@ function HourCard({ hours, hour, index }) {
   } = hours
 
   const containerStyle = {
-    alignItems: 'start',
-    display: { xs: 'grid', sm: 'flex' },
-    justifyContent: { xs: 'center', sm: 'start' },
-    justifyItems: { xs: 'center', sm: 'none' },
+    display: { xs: 'block', sm: 'flex' },
+    justifyItems: { xs: 'start', sm: 'none' },
+  }
+  const mainContentStyle = {
+    display: { xs: 'flex', sm: 'grid' },
+    alignItems: 'center',
+    alignSelf: 'center',
+    px: 0,
+    pt: 0,
+    pb: 1,
+    '&:last-of-type': {
+      paddingBottom: 0,
+    },
+  }
+  const secondaryCardContentStyle = {
+    alignSelf: 'center',
+    pt: 0,
+    pr: 0,
+    pl: { xs: 1, sm: 2.5 },
+    mb: { xs: 1.5, sm: 0 },
+    '&:last-of-type': {
+      paddingBottom: 0,
+    },
   }
   const cardMediaStyle = {
     height: '50px',
@@ -69,11 +89,9 @@ function HourCard({ hours, hour, index }) {
     aspectRatio: '1/1',
   }
   const expandMoreStyle = {
-    alignSelf: 'end',
-    mt: 0.5,
-    ml: { xs: '0', sm: 'auto' },
-    mr: 0.5,
-    mb: 0.5,
+    ml: 'auto',
+    alignSelf: { xs: 'center', sm: 'end' },
+    justifySelf: 'end',
   }
 
   return (
@@ -88,56 +106,58 @@ function HourCard({ hours, hour, index }) {
       tiltMaxAngleY={expanded ? 0 : 0.5}
       style={{ width: '100%' }}
     >
-      <Card>
-        <FlexBox flexWrap='wrap' sx={containerStyle}>
-          <CardContent sx={{ pb: 1 }}>
-            <Typography sx={{ pl: 0.75 }}>
-              {getHourFromFullTime(hour)}
-            </Typography>
-            <CardMedia
-              component='img'
-              image={getWeatherLogo(weatherCode, isDay)}
-              alt='sun logo'
-              sx={cardMediaStyle}
-            />
-          </CardContent>
-          <CardContent sx={{ py: { xs: 0, sm: 2 } }}>
-            <FlexBox flexWrap='wrap' gap={1} mb={2} pl={0.25}>
-              <Typography>{`${Math.round(temperature)} °C`}</Typography>
-              <Typography>|</Typography>
-              <Typography>{`Feels like ${Math.round(feel)} °C`}</Typography>
-              <Typography>|</Typography>
-              <Typography>{getDescription(weatherCode)}</Typography>
-            </FlexBox>
-            <FlexBox gap={2} flexWrap='wrap'>
-              <ToolTip title='chance of rain'>
-                <FlexBox gap={0.5}>
-                  <Droplet />
-                  <Typography>{`${chanceOfRain}%`}</Typography>
-                </FlexBox>
-              </ToolTip>
-              <ToolTip title='cloud coverage'>
-                <FlexBox gap={0.5}>
-                  <Cloud />
-                  <Typography>{`${cloudCover}%`}</Typography>
-                </FlexBox>
-              </ToolTip>
-              <ToolTip title='wind direction'>
-                <FlexBox gap={0.5}>
-                  <DoubleArrow
-                    sx={{ transform: `rotate(${-90 + windDirection}deg)` }}
-                  />
-                  <Typography>{`${windDirection}°`}</Typography>
-                </FlexBox>
-              </ToolTip>
-              <ToolTip title='wind speed'>
-                <FlexBox gap={0.5}>
-                  <Air />
-                  <Typography>{`${windSpeed} km/h`}</Typography>
-                </FlexBox>
-              </ToolTip>
-            </FlexBox>
-          </CardContent>
+      <Card sx={{ py: 1, px: 1.5 }}>
+        <GridBox type='1fr auto' alignItems='center'>
+          <FlexBox flexWrap='wrap' sx={containerStyle}>
+            <CardContent sx={mainContentStyle}>
+              <CardMedia
+                component='img'
+                image={getWeatherLogo(weatherCode, isDay)}
+                alt='sun logo'
+                sx={cardMediaStyle}
+              />
+              <Typography sx={{ pl: 0.75 }}>
+                {getHourFromFullTime(hour)}
+              </Typography>
+            </CardContent>
+            <CardContent sx={secondaryCardContentStyle}>
+              <FlexBox flexWrap='wrap' gap={1} mb={2} pl={0.25}>
+                <Typography>{`${Math.round(temperature)} °C`}</Typography>
+                <Typography>|</Typography>
+                <Typography>{`Feels like ${Math.round(feel)} °C`}</Typography>
+                <Typography>|</Typography>
+                <Typography>{getDescription(weatherCode)}</Typography>
+              </FlexBox>
+              <FlexBox gap={2} flexWrap='wrap'>
+                <ToolTip title='chance of rain'>
+                  <FlexBox gap={0.5}>
+                    <Droplet />
+                    <Typography>{`${chanceOfRain}%`}</Typography>
+                  </FlexBox>
+                </ToolTip>
+                <ToolTip title='cloud coverage'>
+                  <FlexBox gap={0.5}>
+                    <Cloud />
+                    <Typography>{`${cloudCover}%`}</Typography>
+                  </FlexBox>
+                </ToolTip>
+                <ToolTip title='wind direction'>
+                  <FlexBox gap={0.5}>
+                    <DoubleArrow
+                      sx={{ transform: `rotate(${-90 + windDirection}deg)` }}
+                    />
+                    <Typography>{`${windDirection}°`}</Typography>
+                  </FlexBox>
+                </ToolTip>
+                <ToolTip title='wind speed'>
+                  <FlexBox gap={0.5}>
+                    <Air />
+                    <Typography>{`${windSpeed} km/h`}</Typography>
+                  </FlexBox>
+                </ToolTip>
+              </FlexBox>
+            </CardContent>
+          </FlexBox>
           <ExpandMore
             onClick={handleExpandClick}
             aria-expanded={expanded}
@@ -146,10 +166,10 @@ function HourCard({ hours, hour, index }) {
           >
             <ExpandMoreIcon />
           </ExpandMore>
-        </FlexBox>
+        </GridBox>
         <Collapse in={expanded} timeout='auto' unmountOnExit>
-          <Divider sx={{ mx: 1 }} />
-          <CardContent sx={{ py: 2, px: 3 }}>
+          <Divider />
+          <CardContent sx={{ py: 2, pr: 3, pl: 1 }}>
             <FlexBox gap={2} flexWrap='wrap'>
               <ToolTip title='visibility'>
                 <FlexBox gap={0.5}>
