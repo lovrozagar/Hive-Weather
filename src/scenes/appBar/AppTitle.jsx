@@ -1,4 +1,4 @@
-import { useTheme, Box, Typography } from '@mui/material'
+import { useTheme, Box, Typography, ButtonBase } from '@mui/material'
 import FlexBox from '../../components/FlexBox'
 import logo from '../../assets/static/logo.svg'
 
@@ -14,9 +14,6 @@ AppTitle.propTypes = {
 function AppTitle({ sx, component = 'h3', main = false }) {
   const theme = useTheme().palette
 
-  const fluidGray = theme.tone.lightLow
-  const lightGray = theme.lightPreserved.lightGray
-
   const containerStyle = {
     ...sx,
   }
@@ -27,13 +24,28 @@ function AppTitle({ sx, component = 'h3', main = false }) {
     fontFamily: ['Roboto Mono', 'monospace'].join(','),
     fontWeight: '500',
     letterSpacing: -1,
-    color: main ? lightGray : fluidGray,
+    color: main
+      ? theme.lightPreserved.lightGray
+      : theme.lightPreserved.lightGray,
   }
 
   return (
     <Box sx={containerStyle}>
       {main ? (
-        <Link to='/' style={{ textDecoration: 'none' }}>
+        <ButtonBase
+          component={Link}
+          to='/'
+          disableRipple
+          tabIndex={1}
+          color='tone'
+          sx={{
+            borderRadius: 2,
+            '&:focus': {
+              outline: `${theme.tone.lightNormal} solid 2px`,
+              outlineOffset: 3,
+            },
+          }}
+        >
           <FlexBox type='left' gap={0.5}>
             <Box height='42px' width='42px'>
               <Box
@@ -48,7 +60,7 @@ function AppTitle({ sx, component = 'h3', main = false }) {
               hive_weather
             </Typography>
           </FlexBox>
-        </Link>
+        </ButtonBase>
       ) : (
         <FlexBox type='left' gap={0.5}>
           <Box height='42px' width='42px'>
