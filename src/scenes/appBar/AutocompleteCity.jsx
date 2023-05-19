@@ -25,38 +25,34 @@ function AutocompleteCity() {
   const [city, setCity] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [loading, setLoading] = useState(false)
+  const [noCities, setNoCities] = useState(false)
   const [autocompleteRefresh, setAutocompleteRefresh] = useState(0)
 
   const fetchCitySuggestionsData = useFetchCitySuggestionsData()
 
   let debounceFetch = useRef(null)
 
-  const emptySuggestions = useCallback(() => setSuggestions([]), [])
-
   const loadSuggestions = useCallback(() => {
-    setLoading(true)
-
     if (debounceFetch.current) {
       debounceFetch.current.cancel()
       debounceFetch.current = null
+
+      setNoCities(false)
     }
 
     debounceFetch.current = debounce(async () => {
+      setLoading(true)
+
       const suggestions = await fetchCitySuggestionsData(city)
+
       setSuggestions(suggestions)
       setLoading(false)
-    }, 400)
+
+      if (city.length > 0 && suggestions.length === 0) setNoCities(true)
+    }, 300)
 
     debounceFetch.current()
   }, [city, fetchCitySuggestionsData])
-
-  useEffect(() => {
-    if (city && city.length > 0) {
-      loadSuggestions()
-    } else {
-      emptySuggestions()
-    }
-  }, [city, loadSuggestions, emptySuggestions])
 
   // mapping object to a string and extracting later as MUI wants an array of strings
   const suggestionAsString = () => {
@@ -68,7 +64,29 @@ function AutocompleteCity() {
       : []
   }
 
-  const handleSearch = (e) => setCity(e.target.value)
+  useEffect(() => {
+    if (city && city.length > 1) loadSuggestions()
+    else setSuggestions([])
+  }, [city, loadSuggestions])
+
+  const handleSearch = (e) => {
+    const inputValue = e.target.value
+    setCity(inputValue)
+
+    if (inputValue === '') {
+      setNoCities(false)
+      setLoading(false)
+      setAutocompleteRefresh((prev) => prev + 1)
+      return
+    }
+
+    const isAlphanumeric = /^[a-zA-Z0-9\s]+$/.test(inputValue)
+    if (inputValue !== '' && !isAlphanumeric) {
+      setLoading(false)
+      setNoCities(true)
+      return
+    }
+  }
 
   const handleChange = (e, value) => {
     if (value) {
@@ -88,7 +106,6 @@ function AutocompleteCity() {
     // TIMEOUT FOR SUGGESTIONS TO ARRIVE
     await new Promise((resolve) => setTimeout(resolve, 200))
 
-    console.log(suggestions)
     if (suggestions.length) {
       const { city, country, countryCode, lat, lng } = suggestions[0]
       const latStr = lat.toString().replace('.', '_')
@@ -101,8 +118,6 @@ function AutocompleteCity() {
       )
     }
   }
-
-  const isAlphanumeric = /^[a-zA-Z0-9\s]+$/.test(city)
 
   const containerPaperStyle = {
     p: '2px 4px',
@@ -137,10 +152,7 @@ function AutocompleteCity() {
     <Paper component='form' sx={containerPaperStyle}>
       <Tooltip
         title='No cities found'
-        open={Boolean(
-          (!loading && city?.length > 1 && suggestions?.length === 0) ||
-            (!loading && city?.length > 0 && !isAlphanumeric)
-        )}
+        open={noCities}
         enterDelay={500}
         arrow
         disableFocusListener
@@ -156,7 +168,9 @@ function AutocompleteCity() {
         key={autocompleteRefresh}
         selectOnFocus
         clearOnEscape
+        clearOnBlur
         disableListWrap
+        disableClearable
         handleHomeEndKeys
         color='navbar'
         loading={loading}
@@ -217,7 +231,7 @@ function AutocompleteCity() {
         type='button'
         color='primary'
         sx={{ p: '10px' }}
-        aria-label='clear'
+        aria-label='go'
         onClick={handleGoIconClick}
       >
         <Directions />
