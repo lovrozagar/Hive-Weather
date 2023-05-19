@@ -73,6 +73,7 @@ export const themeSettings = (mode) => {
               main: colorTokens.tone[0],
               lightGray: colorTokens.tone[50],
               mediumGray: colorTokens.tone[100],
+              strongGray: colorTokens.tone[600],
             },
             red: {
               main: '#dc2626',
@@ -117,6 +118,7 @@ export const themeSettings = (mode) => {
               main: colorTokens.tone[0],
               lightGray: colorTokens.tone[50],
               mediumGray: colorTokens.tone[100],
+              strongGray: colorTokens.tone[600],
             },
             red: {
               main: '#dc2626',

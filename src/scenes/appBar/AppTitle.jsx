@@ -2,6 +2,8 @@ import { useTheme, Box, Typography, ButtonBase } from '@mui/material'
 import FlexBox from '../../components/FlexBox'
 import logo from '../../assets/static/logo.svg'
 
+import { useContext } from 'react'
+import { ModeContext } from '../../App'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
@@ -12,10 +14,18 @@ AppTitle.propTypes = {
 }
 
 function AppTitle({ sx, component = 'h3', main = false }) {
+  const { mode } = useContext(ModeContext)
   const theme = useTheme().palette
 
   const containerStyle = {
     ...sx,
+  }
+  const buttonBaseStyle = {
+    borderRadius: 2,
+    '&:focus-visible': {
+      outline: `${theme.lightPreserved.lightGray} solid 2px`,
+      outlineOffset: 3,
+    },
   }
   const fontStyle = {
     position: 'relative',
@@ -25,8 +35,10 @@ function AppTitle({ sx, component = 'h3', main = false }) {
     fontWeight: '500',
     letterSpacing: -1,
     color: main
-      ? theme.lightPreserved.lightGray
-      : theme.lightPreserved.lightGray,
+      ? theme.lightPreserved.dark
+      : mode === 'dark'
+      ? theme.lightPreserved.dark
+      : theme.lightPreserved.strongGray,
   }
 
   return (
@@ -38,13 +50,7 @@ function AppTitle({ sx, component = 'h3', main = false }) {
           disableRipple
           tabIndex={1}
           color='tone'
-          sx={{
-            borderRadius: 2,
-            '&:focus': {
-              outline: `${theme.tone.lightNormal} solid 2px`,
-              outlineOffset: 3,
-            },
-          }}
+          sx={buttonBaseStyle}
         >
           <FlexBox type='left' gap={0.5}>
             <Box height='42px' width='42px'>

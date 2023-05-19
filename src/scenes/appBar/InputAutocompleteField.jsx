@@ -8,21 +8,23 @@ InputAutocompleteField.propTypes = {
 }
 
 function InputAutocompleteField({ loading, ...params }) {
+  const textFieldStyle = {
+    '&&': {
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          border: 'none',
+        },
+      },
+    },
+  }
+
   return (
     <TextField
       {...params}
       color='primary'
       size='small'
       placeholder='Search a city'
-      sx={{
-        '&&': {
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              border: 'none',
-            },
-          },
-        },
-      }}
+      sx={textFieldStyle}
       InputProps={{
         ...params.InputProps,
         endAdornment: (
