@@ -16,5 +16,5 @@ npm install --legacy-peer-deps
 ### Start locally
 
 ```
-npm install --legacy-peer-deps
+npm run dev
 ```
