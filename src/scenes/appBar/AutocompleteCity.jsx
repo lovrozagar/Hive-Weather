@@ -104,7 +104,7 @@ function AutocompleteCity() {
 
   const handleGoIconClick = async () => {
     // TIMEOUT FOR SUGGESTIONS TO ARRIVE
-    await new Promise((resolve) => setTimeout(resolve, 200))
+    await new Promise((resolve) => setTimeout(resolve, 400))
 
     if (suggestions.length) {
       const { city, country, countryCode, lat, lng } = suggestions[0]
