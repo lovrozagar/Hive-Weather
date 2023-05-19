@@ -142,13 +142,15 @@ function CityTitle({
           {isHome ? (
             <>
               {weather ? (
-                <Link
+                <Button
+                  component={Link}
                   to={`/forecast/${city}/${country}/${countryCode}/${latStr}/${lonStr}`}
+                  target='_blank'
+                  variant='outlined'
+                  sx={buttonStyle}
                 >
-                  <Button target='_blank' variant='outlined' sx={buttonStyle}>
-                    See more
-                  </Button>
-                </Link>
+                  See more
+                </Button>
               ) : (
                 <Button
                   variant='outlined'
