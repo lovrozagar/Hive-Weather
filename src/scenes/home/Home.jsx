@@ -11,11 +11,7 @@ import useFetchUserGeolocationData from '../../api/useFetchGeolocationData'
 import useFetchCurrentWeatherData from '../../api/useFetchCurrentWeatherData'
 
 function Home() {
-  // const { userCoordinates, userPlace } = useFetchUserGeolocationData()
-  const { userCoordinates, userPlace } = {
-    userCoordinates: null,
-    userPlace: null,
-  }
+  const { userCoordinates, userPlace } = useFetchUserGeolocationData()
   const weatherData = useFetchCurrentWeatherData(
     userCoordinates?.latitude,
     userCoordinates?.longitude

@@ -9,13 +9,16 @@ const useFetchForecastData = (latitude, longitude) => {
     const backendAbsolutePath =
       'https://hive-weather-server.onrender.com/api/weather/forecast?'
 
+    // LOCAL
+    // const backendAbsolutePath = 'http://localhost:5000/api/weather/forecast?'
+
     try {
       const response = await fetch(
         `${backendAbsolutePath}latitude=${latitude}&longitude=${longitude}`
       )
       const json = await response.json()
-      console.log('FORECAST BACKEND REQUEST', json)
       setForecastData([json.timezone, json.current_weather, json.daily])
+      //
     } catch (error) {
       console.error(error)
       setForecastData([null, null, null])

@@ -12,7 +12,6 @@ function CopyLinkButton() {
           title: 'Hive Weather',
           url: window.location.href,
         })
-        console.log('Shared successfully')
       } catch (err) {
         console.error('Error sharing:', err)
       }

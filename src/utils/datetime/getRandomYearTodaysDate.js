@@ -6,7 +6,6 @@ const getRandomYearTodaysDate = () => {
   const year = date.getFullYear() - randomThrowBackYear
   const month = (date.getMonth() + 1).toString().padStart(2, '0')
   const day = date.getDate().toString().padStart(2, '0')
-  console.log('YEAR', year, 'MONTH', month, 'DAY', day)
 
   return `${year}-${month}-${day}`
 }

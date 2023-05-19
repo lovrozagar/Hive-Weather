@@ -42,7 +42,7 @@ function Forecast() {
     },
   }
   return (
-    <Container component='main'>
+    <Container component='main' sx={{ pb: 10 }}>
       <CityTitle
         city={city}
         country={country}

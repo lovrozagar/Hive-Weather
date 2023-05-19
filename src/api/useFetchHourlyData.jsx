@@ -7,12 +7,14 @@ const useFetchHourlyData = (latitude, longitude, index) => {
     const backendAbsolutePath =
       'https://hive-weather-server.onrender.com/api/weather/hourly?'
 
+    // LOCAL
+    // const backendAbsolutePath = 'http://localhost:5000/api/weather/hourly?'
+
     try {
       const response = await fetch(
         `${backendAbsolutePath}latitude=${latitude}&longitude=${longitude}&index=${index}`
       )
       const json = await response.json()
-      console.log('HOURLY BACKEND RESPONSE', json)
 
       setDayHourlyData(json)
     } catch (error) {

@@ -7,6 +7,9 @@ const useFetchGoogleApiKey = () => {
     const backendAbsolutePath =
       'https://hive-weather-server.onrender.com/api/google/key/'
 
+    // LOCAL
+    // const backendAbsolutePath = 'http://localhost:5000/api/google/key/'
+
     const response = await fetch(backendAbsolutePath)
     const json = await response.json()
 

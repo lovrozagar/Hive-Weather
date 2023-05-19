@@ -31,7 +31,7 @@ function Docs() {
           },
           {
             name: 'Autocomplete',
-            text: 'Kako bi se moglo brže navigirati do drugih gradova, komponenta Autocomplete integrirana je u navigacijsku traku umjesto samo na 1. ekranu. Komponenta se spaja na backend koji se spaja na Google Autcomplete API. Backend frontendu vraća do 5 sugestija. "Debounce" funkcija korištena kako bi se normalizirao API zahtjeva prilikom tipkanja. U slučaju da unos nije valjan ili grad nije nađen, tooltip s prikladnom porukom pojaviti će se ispod ikone povećala.',
+            text: 'Kako bi se moglo brže navigirati do drugih gradova, komponenta Autocomplete integrirana je u navigacijsku traku umjesto samo na 1. ekranu. Komponenta se spaja na backend koji se spaja na Google Autcomplete API. Backend frontendu vraća do 5 sugestija. "Debounce" funkcija korištena kako bi se normalizirao broj API zahtjeva prilikom tipkanja. U slučaju da unos nije valjan ili grad nije nađen, tooltip s prikladnom porukom pojaviti će se ispod ikone povećala.',
             api: 'Google Autocomplete',
           },
           {
@@ -130,8 +130,8 @@ function Docs() {
             text: 'Tijekom razvijanja ove aplikacije stekao sam snažnije razumijevanje Reacta, poboljšao rad s API-evima, korištenje hookova i routanja (react-router-dom). Unatoč nedostatku prethodnog iskustva s razvojem backenda, uspješno sam stvorio backend koristeći Node.js i Express. Ovaj uspjeh omogućio mi je uspostavu veze između frontend-a i backend-a, dohvaćanje podataka s vanjskih API-eva na backend pa slanje na frontend. Osim toga, proširio sam svoje vještine hostinga izvan Github Pages, uspješno sam objavio frontend na Netlify i backend na Render.',
           },
           {
-            name: 'Što bih napravio drugacije',
-            text: 'Za bolju tipizaciju i održiviji kod mogao sam koristiti TypeScript medutim zbog neiskustva s backendom i ograničenog vremena, odlucio sam se na JavaScript koji obavio posao ali vjerojatno i oduzeo vremena koliko i uštedio. Trebao sam usvojiti strategiju / konvenciju za imenovanje.',
+            name: 'Što bih napravio drugačije',
+            text: 'Za bolju tipizaciju i održiviji kod mogao sam koristiti TypeScript medutim zbog neiskustva s backendom i ograničenog vremena, odlučio sam se na JavaScript koji je obavio posao, ali vjerojatno i oduzeo vremena koliko i uštedio. Trebao sam usvojiti strategiju / konvenciju za imenovanje.',
           },
           {
             name: 'Što se može poboljšati',

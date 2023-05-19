@@ -9,12 +9,14 @@ const useFetchCurrentWeatherData = (latitude, longitude) => {
     const backendAbsolutePath =
       'https://hive-weather-server.onrender.com/api/weather/current?'
 
+    // LOCAL
+    // const backendAbsolutePath = 'http://localhost:5000/api/weather/current?'
+
     try {
       const response = await fetch(
         `${backendAbsolutePath}latitude=${latitude}&longitude=${longitude}`
       )
       const json = await response.json()
-      console.log('CURRENT BACKEND REQUEST', json)
 
       setCurrentData(json)
       //

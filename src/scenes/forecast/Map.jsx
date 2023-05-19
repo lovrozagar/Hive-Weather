@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
-import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api'
 import { Box } from '@mui/material'
+
+import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api'
 
 Map.propTypes = {
   coordinates: PropTypes.object,
