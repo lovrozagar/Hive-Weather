@@ -160,7 +160,7 @@ function AutocompleteCity() {
         disableInteractive
         disableTouchListener
       >
-        <IconButton sx={{ pointerEvents: 'none' }}>
+        <IconButton tabIndex={-1} sx={{ pointerEvents: 'none' }}>
           <Search />
         </IconButton>
       </Tooltip>

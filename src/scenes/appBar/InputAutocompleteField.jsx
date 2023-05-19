@@ -15,9 +15,11 @@ function InputAutocompleteField({ loading, ...params }) {
       size='small'
       placeholder='Search a city'
       sx={{
-        '& .MuiOutlinedInput-root': {
-          '& fieldset': {
-            border: 'none',
+        '&&': {
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              border: 'none',
+            },
           },
         },
       }}

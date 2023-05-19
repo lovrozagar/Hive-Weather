@@ -50,11 +50,14 @@ function AppBar() {
         </Box>
         <FlexBox type='end' gap={1}>
           <Box sx={optionButtonStyle}>
-            <Link to='/docs'>
-              <Button color='lightPreserved' sx={{ mr: 1 }}>
-                Docs
-              </Button>
-            </Link>
+            <Button
+              component={Link}
+              to='/docs'
+              color='lightPreserved'
+              sx={{ mr: 1 }}
+            >
+              Docs
+            </Button>
           </Box>
           <IconButton
             size='large'

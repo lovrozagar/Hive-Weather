@@ -106,13 +106,13 @@ function SideMenu() {
                   </ListItem>
                 ) : (
                   <ListItem
-                    component={Link}
-                    to={handleAppSceneClick(option)}
                     onClick={(e) => handleLinkNormalClick(e, option)}
                     onAuxClick={(e) => handleLinkMiddleClick(e, option)}
                     sx={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <ListItemButton
+                      component={Link}
+                      to={handleAppSceneClick(option)}
                       onClick={
                         option.toLocaleLowerCase() === 'mode'
                           ? handleModeSwitch
